@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.doug.ssm</groupId>
+    <artifactId>phyExperiment</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <!--这是一个web工程-->
+    <packaging>war</packaging>
+    <name>This is a physics experiment selection system</name>
+
+    <!--依赖版本号配置-->
+    <!--顺序由项目字符集——>测试——>日志——>数据库——>数据库连接——>dao层——>中间层——>控制层
+        ——>页面-->
+    <properties>
+        <!--项目统一字符集-->
+        <project-encoding>UTF-8</project-encoding>
+        <!--项目所使用JDK-->
+        <project-jdk-version>1.8</project-jdk-version>
+        <!--JUnit单元测试版本-->
+        <junit-version>4.12</junit-version>
+        <!--slf4j日志接口和logback日志实现版本-->
+        <slf4j-version>1.7.30</slf4j-version>
+        <logback-version>1.2.0</logback-version>
+        <!--数据库版本-->
+        <mysql-version>8.0.23</mysql-version>
+        <!--数据库连接池版本，这里采用C3P0-->
+        <c3p0-pool-version>0.9.1.1</c3p0-pool-version>
+        <!--MyBatis版本及MyBatis-Spring整合jar包版本-->
+        <mybatis-version>3.5.5</mybatis-version>
+        <mybatis-spring-version>2.0.5</mybatis-spring-version>
+        <!--spring及springMVC版本-->
+        <springframework-version>5.2.3.RELEASE</springframework-version>
+        <!--jsp页面所需的servlet jstl el json版本号-->
+        <servlet-version>3.1.0</servlet-version>
+        <jstl-version>1.2</jstl-version>
+        <taglibs-version>1.1.2</taglibs-version>
+        <json-version>2.12.0</json-version>
+        <!--分页pageHelper版本号-->
+        <pageHelper-version>5.1.0</pageHelper-version>
+    </properties>
+
+    <!--依赖配置-->
+    <dependencies>
+        <!--单元测试-->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${junit-version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!--日志接口及实现-->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>${logback-version}</version>
+        </dependency>
+
+        <!--数据库驱动-->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>${mysql-version}</version>
+        </dependency>
+
+        <!--数据库连接池-->
+        <dependency>
+            <groupId>c3p0</groupId>
+            <artifactId>c3p0</artifactId>
+            <version>${c3p0-pool-version}</version>
+        </dependency>
+
+        <!--mybatis及mybatis-spring-->
+        <dependency>
+            <groupId>org.mybatis</groupId>
+            <artifactId>mybatis</artifactId>
+            <version>${mybatis-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.mybatis</groupId>
+            <artifactId>mybatis-spring</artifactId>
+            <version>${mybatis-spring-version}</version>
+        </dependency>
+
+        <!--spring相关依赖
+            主要用到
+            spring核心组件  spring-core、spring-beans
+            核心组件扩展spring-context
+            切面    spring-aop
+            DAO层   spring-jdbc spring-orm
+            web和web spring-web  spring-webmvc
+            测试  sprint-test-->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId>
+            <version>${springframework-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-beans</artifactId>
+            <version>${springframework-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>${springframework-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-aop</artifactId>
+            <version>${springframework-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-jdbc</artifactId>
+            <version>${springframework-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-orm</artifactId>
+            <version>${springframework-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+            <version>${springframework-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+            <version>${springframework-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>${springframework-version}</version>
+        </dependency>
+
+        <!--jsp页面所需的 servlet jstl taglib json-->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>${servlet-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>jstl</groupId>
+            <artifactId>jstl</artifactId>
+            <version>${jstl-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>taglibs</groupId>
+            <artifactId>standard</artifactId>
+            <version>${taglibs-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${json-version}</version>
+        </dependency>
+
+        <!--分页-->
+        <dependency>
+            <groupId>com.github.pagehelper</groupId>
+            <artifactId>pagehelper</artifactId>
+            <version>${pageHelper-version}</version>
+        </dependency>
+    </dependencies>
+
+    <!--编译的JDK版本配置-->
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>${project-jdk-version}</source>
+                    <target>${project-jdk-version}</target>
+                </configuration>
+            </plugin>
+        </plugins>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
+            <resource>
+                <directory>src/main/java</directory>
+                <includes>
+                    <include>**/*.xml</include>
+                </includes>
+            </resource>
+        </resources>
+    </build>
+
+
+
+</project>
