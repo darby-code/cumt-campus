@@ -27,7 +27,7 @@
         <!--数据库版本-->
         <mysql-version>8.0.23</mysql-version>
         <!--数据库连接池版本，这里采用C3P0-->
-        <c3p0-pool-version>0.9.1.1</c3p0-pool-version>
+        <c3p0-pool-version>0.9.5.2</c3p0-pool-version>
         <!--MyBatis版本及MyBatis-Spring整合jar包版本-->
         <mybatis-version>3.5.5</mybatis-version>
         <mybatis-spring-version>2.0.5</mybatis-spring-version>
@@ -73,7 +73,7 @@
 
         <!--数据库连接池-->
         <dependency>
-            <groupId>c3p0</groupId>
+            <groupId>com.mchange</groupId>
             <artifactId>c3p0</artifactId>
             <version>${c3p0-pool-version}</version>
         </dependency>
