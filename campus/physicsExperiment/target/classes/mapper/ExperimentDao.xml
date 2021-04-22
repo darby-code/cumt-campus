@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="edu.cumt.phyExperiment.dao.ExperimentDao">
+    <sql id="base_column_list">
+        experiment_id, experiment_name, experiment_time, experiment_place, capacity,
+        teacher_id, selected_number, allowSelected, finished
+    </sql>
+    <select id="queryTeacherExperimentBy" resultType="edu.cumt.phyExperiment.entity.Experiment">
+        SELECT <include refid="base_column_list"/>
+        FROM experiment WHERE teacher_id = #{teacherId}
+    </select>
+    <select id="queryExperimentBy" parameterType="int" resultType="edu.cumt.phyExperiment.entity.Experiment">
+         SELECT <include refid="base_column_list"/>
+         FROM experiment WHERE experiment_id = #{experimentId}
+    </select>
+    <select id="queryExperimentBy" parameterType="String" resultType="edu.cumt.phyExperiment.entity.Experiment">
+         SELECT <include refid="base_column_list"/>
+         FROM experiment WHERE experiment_name LIKE '%#{experimentId}%'
+    </select>
+    <select id="queryAllowSelectedExperiments" resultType="edu.cumt.phyExperiment.entity.Experiment">
+        SELECT <include refid="base_column_list"/>
+        FROM experiment WHERE allowSelected = 1
+    </select>
+    <select id="queryNotAllowSelectedExperiments" resultType="edu.cumt.phyExperiment.entity.Experiment">
+        SELECT <include refid="base_column_list"/>
+        FROM experiment WHERE allowSelected = 0
+    </select>
+    <select id="queryFinishedExperiments" resultType="edu.cumt.phyExperiment.entity.Experiment">
+        SELECT <include refid="base_column_list"/>
+        FROM experiment WHERE finished = 1
+    </select>
+    <select id="queryNotFinishedExperiments" resultType="edu.cumt.phyExperiment.entity.Experiment">
+        SELECT <include refid="base_column_list"/>
+        FROM experiment WHERE finished = 0
+    </select>
+    <select id="queryExperimentIsFinished" resultType="boolean">
+        SELECT finished FROM experiment WHERE experiment_id = #{experimentId}
+    </select>
+    <select id="queryMaxExperimentId" resultType="Integer">
+         SELECT experiment_id FROM experiment ORDER BY experiment_id DESC LIMIT 1
+    </select>
+    <select id="queryAllExperiments" resultType="edu.cumt.phyExperiment.entity.Experiment">
+         SELECT <include refid="base_column_list"/>
+         FROM experiment
+    </select>
+    <update id="updateExperimentTime">
+        UPDATE experiment
+        SET
+        experiment_time = #{experimentTime}
+        WHERE experiment_id = #{experimentId}
+    </update>
+    <update id="updateExperimentPlace">
+        UPDATE experiment
+        SET
+        experiment_place = #{experimentPlace}
+        WHERE experiment_id = #{experimentId}
+    </update>
+    <update id="updateExperimentCapacity">
+        UPDATE experiment
+        SET
+        capacity = #{capacity},
+        WHERE experiment_id = #{experimentId}
+    </update>
+    <update id="experimentSelectedNumberPlusOne">
+        UPDATE experiment
+        SET selected_number = selected_number + 1
+        WHERE experiment_id = #{experimentId}
+    </update>
+    <update id="experimentSelectedNumberReduceOne">
+        UPDATE experiment
+        SET selected_number = selected_number - 1
+        WHERE experiment_id = #{experimentId}
+    </update>
+    <insert id="insertExperiment" parameterType="edu.cumt.phyExperiment.entity.Experiment">
+        INSERT experiment (experiment_name, experiment_time, experiment_place
+        , capacity, teacher_id, selected_number, allowSelected, finshed)
+        VALUES
+        (#{experimentName}, #{experimentTime}, #{experimentPlace}, #{capacity}
+        , #{teacherId}, #{selectedNumber}, #{allowSelected}, #{finshed})
+    </insert>
+    <delete id="deleteExperimentBy">
+        DELETE FROM experiment WHERE experiment_id = #{experimentId}
+    </delete>
+</mapper>
