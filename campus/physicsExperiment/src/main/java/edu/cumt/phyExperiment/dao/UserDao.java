@@ -17,14 +17,14 @@ public interface UserDao {
      * @param studentId
      * @return
      */
-    Student queryStudentBy(int studentId);
+    Student queryStudentById(int studentId);
 
     /**
      * 根据姓名查询学生,可能会查出多个同名学生
      * @param name
      * @return
      */
-    List<Student> queryStudentBy(String name);
+    List<Student> queryStudentByName(String name);
 
     /**
      * 查询所有学生
@@ -53,14 +53,14 @@ public interface UserDao {
      * @param teacherId
      * @return
      */
-    Teacher queryTeacherBy(int teacherId);
+    Teacher queryTeacherById(int teacherId);
 
     /**
      * 根据姓名查询教师,可能会查出多个同名教师
      * @param name
      * @return
      */
-    List<Teacher> queryTeacherBy(String name);
+    List<Teacher> queryTeacherByName(String name);
 
     /**
      * 查询所有教师

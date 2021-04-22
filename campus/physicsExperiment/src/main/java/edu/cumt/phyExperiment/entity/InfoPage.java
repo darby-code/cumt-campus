@@ -87,6 +87,6 @@ public class InfoPage {
                 ", totalPage=" + totalPage +
                 ", dataPerPage=" + dataPerPage +
                 ", start=" + start +
-                '}';
+                '}' + "\n";
     }
 }

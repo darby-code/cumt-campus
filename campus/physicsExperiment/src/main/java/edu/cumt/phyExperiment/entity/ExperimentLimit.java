@@ -56,6 +56,6 @@ public class ExperimentLimit {
                 "conditionId=" + conditionId +
                 ", experimentId=" + experimentId +
                 ", collegeId=" + collegeId +
-                '}';
+                '}' + "\n";
     }
 }

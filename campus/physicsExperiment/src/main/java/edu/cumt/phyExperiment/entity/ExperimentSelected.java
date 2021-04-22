@@ -98,6 +98,6 @@ public class ExperimentSelected {
                 ", studentId=" + studentId +
                 ", studentName='" + studentName + '\'' +
                 ", score=" + score +
-                '}';
+                '}' + "\n";
     }
 }

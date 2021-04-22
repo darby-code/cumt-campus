@@ -70,6 +70,6 @@ public class Teacher {
                 ", teacherName='" + teacherName + '\'' +
                 ", password='" + password + '\'' +
                 ", collegeId=" + collegeId +
-                '}';
+                '}' + "\n";
     }
 }

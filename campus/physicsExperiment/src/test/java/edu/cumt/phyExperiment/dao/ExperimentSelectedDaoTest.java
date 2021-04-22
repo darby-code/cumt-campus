@@ -31,14 +31,17 @@ public class ExperimentSelectedDaoTest extends BaseTest {
 
     @Test
     public void queryScore() {
-        int studentId = 100111033;
+        int studentId = 100131023;
         int experimentId = 1011;
         int score = experimentSelectedDao.queryScore(studentId, experimentId);
         System.out.println(score);
     }
 
+    @Test
     public void queryIsFinishedExperimentScore() {
-
+        int studentId = 100131023;
+        List<ExperimentSelected> selectedList = experimentSelectedDao.queryIsFinishedExperimentScore(studentId);
+        System.out.println(selectedList);
     }
 
     @Test
@@ -48,7 +51,7 @@ public class ExperimentSelectedDaoTest extends BaseTest {
         selected.setStudentId(100131023);
         selected.setScore(90);
         experimentSelectedDao.updateScore(1011, 100131023, 90);
-        int score = experimentSelectedDao.queryScore(100111033, 1011);
+        int score = experimentSelectedDao.queryScore(100131023, 1011);
         System.out.println(score);
     }
 
@@ -57,6 +60,7 @@ public class ExperimentSelectedDaoTest extends BaseTest {
         ExperimentSelected selected = new ExperimentSelected();
         selected.setExperimentId(1018);
         selected.setStudentId(100131025);
+        selected.setScore(0);
         experimentSelectedDao.insertExperimentSelected(selected);
         experimentDao.experimentSelectedNumberPlusOne(1018);
     }

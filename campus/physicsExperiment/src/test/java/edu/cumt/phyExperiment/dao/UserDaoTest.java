@@ -16,14 +16,14 @@ public class UserDaoTest extends BaseTest {
     @Test
     public void queryStudentById() {
         int studentId = 100111012;
-        Student student = userDao.queryStudentBy(studentId);
+        Student student = userDao.queryStudentById(studentId);
         System.out.println(student);
     }
 
     @Test
     public void queryStudentByName() {
         String studentName = "刘方圆";
-        List<Student> list = userDao.queryStudentBy(studentName);
+        List<Student> list = userDao.queryStudentByName(studentName);
         System.out.println(list);
     }
 
@@ -44,7 +44,7 @@ public class UserDaoTest extends BaseTest {
     public void updateStudentPassword() {
         Student student = new Student(100111012, "李荣省", "123456", 10011, "矿业学院");
         int result = userDao.updateStudentPassword(student.getStudentId(), student.getPassword());
-        System.out.println(userDao.queryStudentBy(100111012));
+        System.out.println(userDao.queryStudentById(100111012));
         student = new Student(100111012, "李荣省", "100111012", 10011, "矿业学院");
         userDao.updateStudentPassword(student.getStudentId(), student.getPassword());
     }
@@ -52,14 +52,14 @@ public class UserDaoTest extends BaseTest {
     @Test
     public void queryTeacherById() {
         int teacherId = 1002501;
-        Teacher teacher = userDao.queryTeacherBy(teacherId);
+        Teacher teacher = userDao.queryTeacherById(teacherId);
         System.out.println(teacher);
     }
 
     @Test
     public void queryTeacherByName() {
         String name = "张伦";
-        List<Teacher> list = userDao.queryTeacherBy(name);
+        List<Teacher> list = userDao.queryTeacherByName(name);
         System.out.println(list);
     }
 

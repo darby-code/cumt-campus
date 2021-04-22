@@ -5,12 +5,12 @@
 
 <mapper namespace="edu.cumt.phyExperiment.dao.UserDao">
     <!--学生相关SQL操作-->
-    <select id="queryStudentBy" parameterType="int" resultType="edu.cumt.phyExperiment.entity.Student">
+    <select id="queryStudentById" parameterType="int" resultType="edu.cumt.phyExperiment.entity.Student">
         SELECT student_id, student_name, password, college_id, college_name
         FROM student
         WHERE student_id = #{studentId}
     </select>
-    <select id="queryStudentBy" parameterType="String" resultType="edu.cumt.phyExperiment.entity.Student">
+    <select id="queryStudentByName" parameterType="String" resultType="edu.cumt.phyExperiment.entity.Student">
         SELECT student_id, student_name, password, college_id, college_name
         FROM student
         WHERE student_name=#{name}
@@ -31,12 +31,12 @@
     </update>
 
     <!--教师相关SQL操作-->
-    <select id="queryTeacherBy" parameterType="int" resultType="edu.cumt.phyExperiment.entity.Teacher">
+    <select id="queryTeacherById" parameterType="int" resultType="edu.cumt.phyExperiment.entity.Teacher">
         SELECT teacher_id, teacher_name, password, college_id
         FROM teacher
         WHERE teacher_id = #{teacherId}
     </select>
-    <select id="queryTeacherBy" parameterType="String" resultType="edu.cumt.phyExperiment.entity.Teacher">
+    <select id="queryTeacherByName" parameterType="String" resultType="edu.cumt.phyExperiment.entity.Teacher">
         SELECT teacher_id, teacher_name, password, college_id
         FROM teacher
         WHERE teacher_name = #{name}

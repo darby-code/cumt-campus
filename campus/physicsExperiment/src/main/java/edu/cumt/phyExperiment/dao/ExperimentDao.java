@@ -20,14 +20,14 @@ public interface ExperimentDao {
      * @param experimentId
      * @return
      */
-    Experiment queryExperimentBy(int experimentId);
+    Experiment queryExperimentById(int experimentId);
 
     /**
      * 根据实验名称查找实验，可能会返回多个结果
      * @param name
      * @return
      */
-    List<Experiment> queryExperimentBy(String name);
+    List<Experiment> queryExperimentByName(String name);
 
     /**
      * 查询还没有选满的实验

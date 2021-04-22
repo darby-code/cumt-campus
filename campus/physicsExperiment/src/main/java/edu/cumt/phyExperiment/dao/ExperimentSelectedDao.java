@@ -23,12 +23,12 @@ public interface ExperimentSelectedDao {
 
     /**
      * 学生查询一个实验的成绩，如果没有该实验没有结课
-     * 则返回一个提示
+     * 则返回一个NULL,要捕获异常
      * @param studentId
      * @param experimentId
      * @return
      */
-    int queryScore(@Param("studentId") int studentId, @Param("experimentId") int experimentId);
+    Integer queryScore(@Param("studentId") int studentId, @Param("experimentId") int experimentId);
 
     /**
      * 查询一个学生所选实验，实验已经结课的成绩

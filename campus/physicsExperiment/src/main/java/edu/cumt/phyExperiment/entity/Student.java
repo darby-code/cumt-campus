@@ -85,6 +85,6 @@ public class Student {
                 ", password='" + password + '\'' +
                 ", collegeId=" + collegeId +
                 ", collegeName='" + collegeName + '\'' +
-                '}';
+                '}' + "\n";
     }
 }

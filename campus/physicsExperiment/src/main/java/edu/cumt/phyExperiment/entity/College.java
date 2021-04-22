@@ -42,6 +42,6 @@ public class College {
         return "College{" +
                 "collegeId=" + collegeId +
                 ", collegeName='" + collegeName + '\'' +
-                '}';
+                '}' + "\n";
     }
 }

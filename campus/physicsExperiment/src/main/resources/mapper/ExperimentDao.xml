@@ -12,13 +12,13 @@
         SELECT <include refid="base_column_list"/>
         FROM experiment WHERE teacher_id = #{teacherId}
     </select>
-    <select id="queryExperimentBy" parameterType="int" resultType="edu.cumt.phyExperiment.entity.Experiment">
+    <select id="queryExperimentById" parameterType="int" resultType="edu.cumt.phyExperiment.entity.Experiment">
          SELECT <include refid="base_column_list"/>
          FROM experiment WHERE experiment_id = #{experimentId}
     </select>
-    <select id="queryExperimentBy" parameterType="String" resultType="edu.cumt.phyExperiment.entity.Experiment">
+    <select id="queryExperimentByName" parameterType="String" resultType="edu.cumt.phyExperiment.entity.Experiment">
          SELECT <include refid="base_column_list"/>
-         FROM experiment WHERE experiment_name LIKE '%#{experimentId}%'
+         FROM experiment WHERE experiment_name LIKE CONCAT('%',#{experimentId},'%')
     </select>
     <select id="queryAllowSelectedExperiments" resultType="edu.cumt.phyExperiment.entity.Experiment">
         SELECT <include refid="base_column_list"/>
@@ -61,7 +61,7 @@
     <update id="updateExperimentCapacity">
         UPDATE experiment
         SET
-        capacity = #{capacity},
+        capacity = #{capacity}
         WHERE experiment_id = #{experimentId}
     </update>
     <update id="experimentSelectedNumberPlusOne">
@@ -76,10 +76,10 @@
     </update>
     <insert id="insertExperiment" parameterType="edu.cumt.phyExperiment.entity.Experiment">
         INSERT experiment (experiment_name, experiment_time, experiment_place
-        , capacity, teacher_id, selected_number, allowSelected, finshed)
+        , capacity, teacher_id, selected_number, allowSelected, finished)
         VALUES
         (#{experimentName}, #{experimentTime}, #{experimentPlace}, #{capacity}
-        , #{teacherId}, #{selectedNumber}, #{allowSelected}, #{finshed})
+        , #{teacherId}, #{selectedNumber}, #{allowSelected}, #{finished})
     </insert>
     <delete id="deleteExperimentBy">
         DELETE FROM experiment WHERE experiment_id = #{experimentId}

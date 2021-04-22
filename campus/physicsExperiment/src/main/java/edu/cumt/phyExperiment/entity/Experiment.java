@@ -160,6 +160,6 @@ public class Experiment {
                 ", limitCollege=" + limitCollege +
                 ", allowSelected=" + allowSelected +
                 ", finished=" + finished +
-                '}';
+                '}' + "\n";
     }
 }

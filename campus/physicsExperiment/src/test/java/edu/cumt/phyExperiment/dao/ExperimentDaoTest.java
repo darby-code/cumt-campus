@@ -24,14 +24,14 @@ public class ExperimentDaoTest extends BaseTest {
     @Test
     public void queryExperimentById() {
         int experimentId = 1010;
-        Experiment experiment = experimentDao.queryExperimentBy(experimentId);
+        Experiment experiment = experimentDao.queryExperimentById(experimentId);
         System.out.println(experiment);
     }
 
     @Test
     public void queryExperimentByName() {
         String experimentName = "实验";
-        List<Experiment> list = experimentDao.queryExperimentBy(experimentName);
+        List<Experiment> list = experimentDao.queryExperimentByName(experimentName);
         System.out.println(list);
     }
 
@@ -64,7 +64,7 @@ public class ExperimentDaoTest extends BaseTest {
         int ex01 = 1016;
         int ex02 = 1017;
         boolean ex1 = experimentDao.queryExperimentIsFinished(ex01);
-        boolean ex2 = experimentDao.queryExperimentIsFinished(ex01);
+        boolean ex2 = experimentDao.queryExperimentIsFinished(ex02);
         System.out.println("ex01=" + ex1 + ", ex02=" + ex2);
     }
 
@@ -82,33 +82,33 @@ public class ExperimentDaoTest extends BaseTest {
 
     @Test
     public void updateExperimentTime() {
-        Experiment experiment = experimentDao.queryExperimentBy(1009);
+        Experiment experiment = experimentDao.queryExperimentById(1009);
         Experiment newExperiment = new Experiment();
         int result = experimentDao.updateExperimentTime(experiment.getExperimentId(), new Date());
         System.out.println(result);
-        newExperiment = experimentDao.queryExperimentBy(1009);
+        newExperiment = experimentDao.queryExperimentById(1009);
         System.out.println(newExperiment);
         experimentDao.updateExperimentTime(experiment.getExperimentId(), experiment.getExperimentTime());
     }
 
     @Test
     public void updateExperimentPlace() {
-        Experiment experiment = experimentDao.queryExperimentBy(1009);
+        Experiment experiment = experimentDao.queryExperimentById(1009);
         Experiment newExperiment = new Experiment();
         int result = experimentDao.updateExperimentPlace(experiment.getExperimentId(), "用于测试");
         System.out.println(result);
-        newExperiment = experimentDao.queryExperimentBy(1009);
+        newExperiment = experimentDao.queryExperimentById(1009);
         System.out.println(newExperiment);
         experimentDao.updateExperimentPlace(experiment.getExperimentId(), experiment.getExperimentPlace());
     }
 
     @Test
     public void updateExperimentCapacity() {
-        Experiment experiment = experimentDao.queryExperimentBy(1009);
+        Experiment experiment = experimentDao.queryExperimentById(1009);
         Experiment newExperiment = new Experiment();
         int result = experimentDao.updateExperimentCapacity(experiment.getExperimentId(), 100);
         System.out.println(result);
-        newExperiment = experimentDao.queryExperimentBy(1009);
+        newExperiment = experimentDao.queryExperimentById(1009);
         System.out.println(newExperiment);
         experimentDao.updateExperimentCapacity(experiment.getExperimentId(), experiment.getCapacity());
     }
@@ -116,20 +116,20 @@ public class ExperimentDaoTest extends BaseTest {
     @Test
     public void experimentSelectedNumberPlusOne() {
         int experimentId = 1010;
-        Experiment experiment = experimentDao.queryExperimentBy(experimentId);
+        Experiment experiment = experimentDao.queryExperimentById(experimentId);
         System.out.println(experiment);
         experimentDao.experimentSelectedNumberPlusOne(experimentId);
-        experiment = experimentDao.queryExperimentBy(experimentId);
+        experiment = experimentDao.queryExperimentById(experimentId);
         System.out.println(experiment);
     }
 
     @Test
     public void experimentSelectedNumberReduceOne() {
         int experimentId = 1010;
-        Experiment experiment = experimentDao.queryExperimentBy(experimentId);
+        Experiment experiment = experimentDao.queryExperimentById(experimentId);
         System.out.println(experiment);
         experimentDao.experimentSelectedNumberReduceOne(experimentId);
-        experiment = experimentDao.queryExperimentBy(experimentId);
+        experiment = experimentDao.queryExperimentById(experimentId);
         System.out.println(experiment);
     }
 
