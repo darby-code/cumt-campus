@@ -15,10 +15,11 @@ public interface ExperimentLimitDao {
 
     /**
      * 新增一个实验的限选条件
-     * @param experimentLimit
+     * @param experimentId
+     * @param collegeId
      * @return
      */
-    int insertCollegeLimit(ExperimentLimit experimentLimit);
+    int insertCollegeLimit(@Param("experimentId") int experimentId, @Param("collegeId") int collegeId);
 
     /**
      * 删除一个实验的限选条件

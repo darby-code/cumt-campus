@@ -22,8 +22,7 @@ public class ExperimentLimitDaoTest extends BaseTest {
 
     @Test
     public void insertCollegeLimit() {
-        ExperimentLimit experimentLimit = new ExperimentLimit(0, 1009, 10012);
-        int result = experimentLimitDao.insertCollegeLimit(experimentLimit);
+        int result = experimentLimitDao.insertCollegeLimit(1009, 10012);
         System.out.println(result);
     }
 

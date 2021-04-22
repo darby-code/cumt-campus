@@ -29,9 +29,9 @@ public interface ExperimentLimitService {
      * 删除实验的一个限选学院
      * @param experimentId 实验编号
      * @param collegeId 删除的限选学院代号
-     * @return true表示删除成功，false表示删除失败
+     * @return 1表示删除成功，0表示删除失败
      */
-    boolean moveConditionAtExperiment(int experimentId, int collegeId);
+    int moveConditionAtExperiment(int experimentId, int collegeId);
 
     /**
      * 删除实验的所有限选学院

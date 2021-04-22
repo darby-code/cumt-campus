@@ -5,13 +5,13 @@
 
 <mapper namespace="edu.cumt.phyExperiment.dao.ExperimentSelectedDao">
     <select id="queryExperimentSelectedBy" resultType="edu.cumt.phyExperiment.entity.ExperimentSelected">
-        SELECT e.serial_id, e.experiment_id, ee.experiment_name, e.student_id, s.student_name, e.score
+        SELECT e.serial_id, e.experiment_id, ee.experiment_name, e.student_id, s.student_name, e.score, e.allowModified
         FROM (experiment_selected_list e INNER JOIN student s ON e.student_id = s.student_id)
         INNER JOIN experiment ee ON e.experiment_id = ee.experiment_id
         WHERE e.experiment_id = #{experimentId}
     </select>
     <select id="queryStudentSelectedExperimentsBy" resultType="edu.cumt.phyExperiment.entity.ExperimentSelected">
-        SELECT e.serial_id, e.experiment_id, ee.experiment_name, e.student_id, s.student_name, e.score
+        SELECT e.serial_id, e.experiment_id, ee.experiment_name, e.student_id, s.student_name, e.score, e.allowModified
         FROM (experiment_selected_list e INNER JOIN student s ON e.student_id = s.student_id)
         INNER JOIN experiment ee ON e.experiment_id = ee.experiment_id
         WHERE e.student_id = #{studentId}
@@ -22,14 +22,15 @@
         WHERE student_id = #{studentId} AND experiment_id = #{experimentId}
     </select>
     <select id="queryIsFinishedExperimentScore" resultType="edu.cumt.phyExperiment.entity.ExperimentSelected">
-        SELECT e.serial_id, e.experiment_id, ee.experiment_name, e.student_id, s.student_name, e.score
+        SELECT e.serial_id, e.experiment_id, ee.experiment_name, e.student_id, s.student_name, e.score, e.allowModified
         FROM (experiment_selected_list e INNER JOIN student s ON e.student_id = s.student_id)
         INNER JOIN experiment ee ON (e.experiment_id = ee.experiment_id AND ee.finished = 1)
         WHERE e.student_id = #{studentId}
     </select>
     <update id="updateScore">
         UPDATE experiment_selected_list
-        SET score = #{score}
+        SET score = #{score},
+        allowModified = #{allowModified}
         WHERE student_id = #{studentId} AND experiment_id = #{experimentId}
     </update>
     <insert id="insertExperimentSelected" parameterType="edu.cumt.phyExperiment.entity.ExperimentSelected">
@@ -46,4 +47,7 @@
         WHERE
         experiment_id = #{experimentId} AND student_id = #{studentId}
     </delete>
+    <select id="queryIsAllowModifiedScore" resultType="boolean">
+        SELECT allowModified FROM experiment_selected_list WHERE experiment_id = #{experimentId}
+    </select>
 </mapper>

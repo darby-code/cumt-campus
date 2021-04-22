@@ -7,7 +7,7 @@
     <select id="queryExperimentLimitCollegeIdBy" resultType="Integer">
         SELECT college_id FROM experiment_limit_list WHERE experiment_id = #{experimentId}
     </select>
-    <insert id="insertCollegeLimit" parameterType="edu.cumt.phyExperiment.entity.ExperimentLimit">
+    <insert id="insertCollegeLimit">
         INSERT experiment_limit_list
         (experiment_id, college_id)
         VALUES

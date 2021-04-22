@@ -45,7 +45,8 @@ public interface ExperimentSelectedDao {
      * @param score
      * @return
      */
-    int updateScore(@Param("experimentId") int experimentId, @Param("studentId") int studentId, @Param("score") int score);
+    int updateScore(@Param("experimentId") int experimentId, @Param("studentId") int studentId
+            , @Param("score") int score, @Param("allowModified") boolean allowModified);
 
     /**
      * 新增一个实验选课记录
@@ -68,4 +69,11 @@ public interface ExperimentSelectedDao {
      * @return
      */
     int deleteExperimentBy(@Param("experimentId") int experimentId, @Param("studentId") int studentId);
+
+    /**
+     * 查询一个实验是否可以修改成绩
+     * @param experimentId
+     * @return
+     */
+    boolean queryIsAllowModifiedScore(int experimentId);
 }

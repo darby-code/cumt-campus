@@ -28,16 +28,23 @@ public class ExperimentSelected {
      * 学生实验分数
      */
     private Integer score;
+    /**
+     * 该标识为是否允许教师修改学生成绩
+     * 教师提交成绩后就不可修改成绩
+     * 只能通过管理员进行修改
+     */
+    private boolean allowModified = true;
 
     public ExperimentSelected() {}
 
     public ExperimentSelected(Integer experimentId, String experimentName, Integer studentId
-            , String studentName, Integer score) {
+            , String studentName, Integer score, boolean allowModified) {
         this.experimentId = experimentId;
         this.experimentName = experimentName;
         this.studentId = studentId;
         this.studentName = studentName;
         this.score = score;
+        this.allowModified = allowModified;
     }
 
     /*****************Getter和Setter以及toString方法*************************/
@@ -89,6 +96,14 @@ public class ExperimentSelected {
         this.studentName = studentName;
     }
 
+    public boolean isAllowModified() {
+        return allowModified;
+    }
+
+    public void setAllowModified(boolean allowModified) {
+        this.allowModified = allowModified;
+    }
+
     @Override
     public String toString() {
         return "ExperimentSelected{" +
@@ -98,6 +113,7 @@ public class ExperimentSelected {
                 ", studentId=" + studentId +
                 ", studentName='" + studentName + '\'' +
                 ", score=" + score +
-                '}' + "\n";
+                ", allowModified=" + allowModified +
+                '}';
     }
 }
