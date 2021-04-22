@@ -3,7 +3,7 @@ package edu.cumt.phyExperiment.entity;
 import java.util.Date;
 
 /**
- * 将教师和学生抽象成一个用户类
+ * 将教师、学生、管理员抽象成一个用户类
  */
 public class User {
     /**

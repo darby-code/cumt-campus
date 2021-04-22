@@ -30,7 +30,7 @@ public interface ExperimentDao {
     List<Experiment> queryExperimentByName(String name);
 
     /**
-     * 查询还没有选满的实验
+     * 查询还没有选满和允许选的实验
      * @return
      */
     List<Experiment> queryAllowSelectedExperiments();
