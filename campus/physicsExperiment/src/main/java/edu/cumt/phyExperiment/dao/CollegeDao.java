@@ -11,14 +11,14 @@ public interface CollegeDao {
      * @param collegeId
      * @return
      */
-    String queryCollegeNameBy(int collegeId);
+    String queryCollegeNameById(long collegeId);
 
     /**
      * 查询学院的介绍
      * @param collegeId
      * @return
      */
-    String queryCollegeDescriptionBy(int collegeId);
+    String queryCollegeDescriptionById(long collegeId);
 
     /**
      * 查询所有学院

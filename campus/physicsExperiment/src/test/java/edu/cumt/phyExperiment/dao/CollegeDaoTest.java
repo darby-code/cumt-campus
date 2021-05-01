@@ -13,16 +13,16 @@ public class CollegeDaoTest extends BaseTest {
     CollegeDao collegeDao;
 
     @Test
-    public void queryCollegeNameBy() {
-        int collegeId = 10013;
-        String collegeName = collegeDao.queryCollegeNameBy(collegeId);
+    public void queryCollegeNameById() {
+        int collegeId = 100103;
+        String collegeName = collegeDao.queryCollegeNameById(collegeId);
         System.out.println(collegeName);
     }
 
     @Test
-    public void queryCollegeDescriptionBy() {
-        int collegeId = 10013;
-        String description = collegeDao.queryCollegeDescriptionBy(collegeId);
+    public void queryCollegeDescriptionById() {
+        int collegeId = 100103;
+        String description = collegeDao.queryCollegeDescriptionById(collegeId);
         System.out.println(description);
     }
 

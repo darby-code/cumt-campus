@@ -37,6 +37,22 @@
         <property name="typeAliasesPackage" value="edu.cumt.phyExperiment.entity" />
         <!-- 扫描sql配置文件:mapper需要的xml文件 -->
         <property name="mapperLocations" value="classpath:mapper/*.xml" />
+
+        <property name="plugins">
+            <array>
+                <bean class="com.github.pagehelper.PageInterceptor">
+                    <property name="properties">
+                        <value>
+                            <!--配置PageHelper-->
+                            offsetAsPageNum = true
+                            reasonable = true
+                            rowBoundsWithCount = true
+                            pageSizeZero = true
+                        </value>
+                    </property>
+                </bean>
+            </array>
+        </property>
     </bean>
 
     <!-- 配置扫描DAO接口包，动态实现DAO接口注入到spring容器中 -->
@@ -46,4 +62,6 @@
         <!-- 给出需要扫描的DAO接口包 -->
         <property name="basePackage" value="edu.cumt.phyExperiment.dao" />
     </bean>
+
+    <bean id="clickNumberControl" class="edu.cumt.phyExperiment.util.ClickNumberControl"></bean>
 </beans>

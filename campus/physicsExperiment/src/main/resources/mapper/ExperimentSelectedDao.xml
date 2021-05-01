@@ -4,50 +4,130 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="edu.cumt.phyExperiment.dao.ExperimentSelectedDao">
-    <select id="queryExperimentSelectedBy" resultType="edu.cumt.phyExperiment.entity.ExperimentSelected">
-        SELECT e.serial_id, e.experiment_id, ee.experiment_name, e.student_id, s.student_name, e.score, e.allowModified
-        FROM (experiment_selected_list e INNER JOIN student s ON e.student_id = s.student_id)
-        INNER JOIN experiment ee ON e.experiment_id = ee.experiment_id
-        WHERE e.experiment_id = #{experimentId}
+
+    <select id="queryAllSelectedExperiments" resultType="edu.cumt.phyExperiment.entity.ExperimentSelected">
+        SELECT es.serial_id,
+        e.experiment_id 'experiment.experiment_id',
+        e.experiment_name 'experiment.experiment_name',
+        e.week_day 'experiment.week_day',
+        e.experiment_time 'experiment.experiment_time',
+        e.experiment_place 'experiment.experiment_place',
+        t.teacher_id 'experiment.teacher_id',
+        t.teacher_name 'experiment.teacher_name',
+        t.phone_number 'experiment.phone_number',
+        e.capacity 'experiment.capacity',
+        e.selected_number 'experiment.selected_number',
+        e.allowSelected 'experiment.allowSelected',
+        e.finished 'experiment.finished',
+        s.student_id 'student.student_id',
+        s.student_name 'student.student_name',
+        c.college_id 'student.college.college_id',
+        c.college_name 'student.college.college_name',
+        c.description 'student.college.description',
+        s.class_info 'student.class_info',
+        s.phone_number 'student.phone_number',
+        es.score,
+        es.allowModified
+        FROM ((experiment_selected es INNER JOIN (experiment e INNER JOIN teacher t ON e.teacher_id = t.teacher_id) 
+        ON es.experiment_id = e.experiment_id)) INNER JOIN (student s INNER JOIN college c ON s.college_id = c.college_id) ON es.student_id = s.student_id
     </select>
-    <select id="queryStudentSelectedExperimentsBy" resultType="edu.cumt.phyExperiment.entity.ExperimentSelected">
-        SELECT e.serial_id, e.experiment_id, ee.experiment_name, e.student_id, s.student_name, e.score, e.allowModified
-        FROM (experiment_selected_list e INNER JOIN student s ON e.student_id = s.student_id)
-        INNER JOIN experiment ee ON e.experiment_id = ee.experiment_id
-        WHERE e.student_id = #{studentId}
+    <select id="queryOneSelectedExperiment" resultType="edu.cumt.phyExperiment.entity.ExperimentSelected">
+        SELECT es.serial_id,
+        e.experiment_id 'experiment.experiment_id',
+        e.experiment_name 'experiment.experiment_name',
+        e.week_day 'experiment.week_day',
+        e.experiment_time 'experiment.experiment_time',
+        e.experiment_place 'experiment.experiment_place',
+        t.teacher_id 'experiment.teacher_id',
+        t.teacher_name 'experiment.teacher_name',
+        t.phone_number 'experiment.phone_number',
+        e.capacity 'experiment.capacity',
+        e.selected_number 'experiment.selected_number',
+        e.allowSelected 'experiment.allowSelected',
+        e.finished 'experiment.finished',
+        s.student_id 'student.student_id',
+        s.student_name 'student.student_name',
+        c.college_id 'student.college.college_id',
+        c.college_name 'student.college.college_name',
+        c.description 'student.college.description',
+        s.class_info 'student.class_info',
+        s.phone_number 'student.phone_number',
+        es.score,
+        es.allowModified
+        FROM experiment_selected es INNER JOIN ((experiment e INNER JOIN teacher t ON e.teacher_id = t.teacher_id)
+        INNER JOIN (student s INNER JOIN college c ON s.college_id = c.college_id)) ON (es.experiment_id = e.experiment_id AND es.student_id = s.student_id)
+        WHERE es.experiment_id = #{experimentId} AND es.student_id = #{studentId}
     </select>
-    <select id="queryScore" resultType="Integer">
-        SELECT score
-        FROM experiment_selected_list
-        WHERE student_id = #{studentId} AND experiment_id = #{experimentId}
+    <select id="queryExperimentSelectedStudentBy" resultType="edu.cumt.phyExperiment.entity.Student">
+        SELECT 
+        s.student_id,
+        s.student_name,
+        s.password,
+        c.college_id 'college.college_id',
+        c.college_name 'college.college_name',
+        c.description 'college.description',
+        s.class_info,
+        s.sex,
+        s.phone_number,
+        s.email,
+        s.qq,
+        s.state
+        FROM experiment_selected es INNER JOIN (student s INNER JOIN college c ON s.college_id = c.college_id) ON es.student_id = s.student_id
+        WHERE es.experiment_id = #{experimentId}
     </select>
-    <select id="queryIsFinishedExperimentScore" resultType="edu.cumt.phyExperiment.entity.ExperimentSelected">
-        SELECT e.serial_id, e.experiment_id, ee.experiment_name, e.student_id, s.student_name, e.score, e.allowModified
-        FROM (experiment_selected_list e INNER JOIN student s ON e.student_id = s.student_id)
-        INNER JOIN experiment ee ON (e.experiment_id = ee.experiment_id AND ee.finished = 1)
-        WHERE e.student_id = #{studentId}
+    <select id="queryStudentSelectedExperimentsBy" resultType="edu.cumt.phyExperiment.entity.Experiment">
+        SELECT
+        e.experiment_id,
+        e.experiment_name,
+        e.experiment_time,
+        e.week_day,
+        e.experiment_place,
+        t.teacher_id,
+        t.teacher_name,
+        t.phone_number,
+        e.capacity,
+        e.selected_number,
+        e.allowSelected,
+        e.finished,
+        e.state
+        FROM experiment_selected es INNER JOIN (experiment e INNER JOIN teacher t ON e.teacher_id = t.teacher_id)
+        ON es.experiment_id = e.experiment_id
+        WHERE es.student_id = #{studentId}
     </select>
+    <select id="queryScore" resultType="edu.cumt.phyExperiment.entity.ExperimentSelected">
+        SELECT
+        e.experiment_id 'experiment.experiment_id',
+        e.experiment_name 'experiment.experiment_name',
+        t.teacher_name 'experiment.teacher.teacher_name',
+        s.student_id 'student.student_id',
+        s.student_name 'student.student_name',
+        es.score
+        FROM (experiment_selected es INNER JOIN (experiment e INNER JOIN teacher t ON e.teacher_id = t.teacher_id AND e.finished = 1)
+        ON es.experiment_id = e.experiment_id) INNER JOIN student s ON es.student_id = s.student_id
+        WHERE es.student_id = #{studentId}
+    </select>
+
     <update id="updateScore">
-        UPDATE experiment_selected_list
+        UPDATE experiment_selected
         SET score = #{score},
         allowModified = #{allowModified}
         WHERE student_id = #{studentId} AND experiment_id = #{experimentId}
     </update>
-    <insert id="insertExperimentSelected" parameterType="edu.cumt.phyExperiment.entity.ExperimentSelected">
-        INSERT experiment_selected_list
-        (student_id, experiment_id, score)
+    <insert id="insertExperimentSelected">
+        INSERT experiment_selected
+        (student_id, experiment_id)
         VALUES
-        (#{studentId}, #{experimentId}, #{score})
+        (#{studentId}, #{experimentId})
     </insert>
     <delete id="deleteStudentBy">
-        DELETE FROM experiment_selected_list WHERE experiment_id = #{experimentId}
+        DELETE FROM experiment_selected WHERE experiment_id = #{experimentId}
     </delete>
     <delete id="deleteExperimentBy">
-        DELETE FROM experiment_selected_list
+        DELETE FROM experiment_selected
         WHERE
         experiment_id = #{experimentId} AND student_id = #{studentId}
     </delete>
     <select id="queryIsAllowModifiedScore" resultType="boolean">
-        SELECT allowModified FROM experiment_selected_list WHERE experiment_id = #{experimentId}
+        SELECT allowModified FROM experiment_selected WHERE experiment_id = #{experimentId} AND student_id = #{studentId}
     </select>
 </mapper>

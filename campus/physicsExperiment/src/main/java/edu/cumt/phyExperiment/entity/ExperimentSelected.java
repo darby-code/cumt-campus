@@ -1,75 +1,65 @@
 package edu.cumt.phyExperiment.entity;
 
+import java.util.Date;
+
 /**
  * 学生选实验的POJO类
  */
 public class ExperimentSelected {
     /**
-     * 流水号，唯一标识符
+     * 流水号，自增，唯一标识符
      */
-    private Integer serialId;
+    private Long serialId;
+
     /**
-     * 学生所选实验编号
+     * 已选实验的相关信息
      */
-    private Integer experimentId;
+    private Experiment experiment;
     /**
-     * 学生所选实验名称
+     * 选实验学生相关信息
      */
-    private String experimentName;
+    private Student student;
     /**
-     * 选实验的学生学号
-     */
-    private Integer studentId;
-    /**
-     * 学生姓名
-     */
-    private String studentName;
-    /**
-     * 学生实验分数
+     * 学生实验成绩
      */
     private Integer score;
     /**
+     * 用于教师录入成绩
      * 该标识为是否允许教师修改学生成绩
      * 教师提交成绩后就不可修改成绩
      * 只能通过管理员进行修改
      */
-    private boolean allowModified = true;
+    private Boolean allowModified;
 
     public ExperimentSelected() {}
 
-    public ExperimentSelected(Integer experimentId, String experimentName, Integer studentId
-            , String studentName, Integer score, boolean allowModified) {
-        this.experimentId = experimentId;
-        this.experimentName = experimentName;
-        this.studentId = studentId;
-        this.studentName = studentName;
-        this.score = score;
-        this.allowModified = allowModified;
+    public ExperimentSelected(Experiment experiment, Student student) {
+        this.experiment = experiment;
+        this.student = student;
     }
-
     /*****************Getter和Setter以及toString方法*************************/
-    public Integer getSerialId() {
+    public Long getSerialId() {
         return serialId;
     }
 
-    public void setSerialId(Integer serialId) {
+    public void setSerialId(Long serialId) {
         this.serialId = serialId;
     }
 
-    public Integer getStudentId() {
-        return studentId;
+    public Experiment getExperiment() {
+        return experiment;
     }
 
-    public void setStudentId(Integer studentId) {
-        this.studentId = studentId;
+    public void setExperiment(Experiment experiment) {
+        this.experiment = experiment;
     }
 
-    public Integer getExperimentId() {
-        return experimentId;
+    public Student getStudent() {
+        return student;
     }
 
-    public void setExperimentId(Integer experimentId) {
-        this.experimentId = experimentId;
+    public void setStudent(Student student) {
+        this.student = student;
     }
 
     public Integer getScore() {
@@ -80,27 +70,11 @@ public class ExperimentSelected {
         this.score = score;
     }
 
-    public String getExperimentName() {
-        return experimentName;
-    }
-
-    public void setExperimentName(String experimentName) {
-        this.experimentName = experimentName;
-    }
-
-    public String getStudentName() {
-        return studentName;
-    }
-
-    public void setStudentName(String studentName) {
-        this.studentName = studentName;
-    }
-
-    public boolean isAllowModified() {
+    public Boolean getAllowModified() {
         return allowModified;
     }
 
-    public void setAllowModified(boolean allowModified) {
+    public void setAllowModified(Boolean allowModified) {
         this.allowModified = allowModified;
     }
 
@@ -108,10 +82,8 @@ public class ExperimentSelected {
     public String toString() {
         return "ExperimentSelected{" +
                 "serialId=" + serialId +
-                ", experimentId=" + experimentId +
-                ", experimentName='" + experimentName + '\'' +
-                ", studentId=" + studentId +
-                ", studentName='" + studentName + '\'' +
+                ", experiment=" + experiment +
+                ", student=" + student +
                 ", score=" + score +
                 ", allowModified=" + allowModified +
                 '}';

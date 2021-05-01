@@ -16,8 +16,8 @@ public class CollegeServiceImpl implements CollegeService {
     CollegeDao collegeDao;
 
     @Override
-    public String queryCollegeNameById(int collegeId) {
-        return collegeDao.queryCollegeNameBy(collegeId);
+    public String queryCollegeNameById(long collegeId) {
+        return collegeDao.queryCollegeNameById(collegeId);
     }
 
     @Override
@@ -26,7 +26,7 @@ public class CollegeServiceImpl implements CollegeService {
     }
 
     @Override
-    public String queryCollegeDescriptionById(int collegeId) {
-        return collegeDao.queryCollegeDescriptionBy(collegeId);
+    public String queryCollegeDescriptionById(long collegeId) {
+        return collegeDao.queryCollegeDescriptionById(collegeId);
     }
 }

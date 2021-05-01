@@ -4,19 +4,19 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="edu.cumt.phyExperiment.dao.ExperimentLimitDao">
-    <select id="queryExperimentLimitCollegeIdBy" resultType="Integer">
-        SELECT college_id FROM experiment_limit_list WHERE experiment_id = #{experimentId}
+    <select id="queryExperimentLimitCollegeIdById" resultType="long">
+        SELECT college_id FROM experiment_limit WHERE experiment_id = #{experimentId}
     </select>
     <insert id="insertCollegeLimit">
-        INSERT experiment_limit_list
+        INSERT experiment_limit
         (experiment_id, college_id)
         VALUES
         (#{experimentId}, #{collegeId})
     </insert>
     <delete id="deleteCollegeLimit">
-        DELETE FROM experiment_limit_list WHERE experiment_id = #{experimentId} AND college_id = #{collegeId}
+        DELETE FROM experiment_limit WHERE experiment_id = #{experimentId} AND college_id = #{collegeId}
     </delete>
-    <delete id="deleteExperimentLimitBy">
-        DELETE FROM experiment_limit_list WHERE experiment_id = #{experimentId}
+    <delete id="deleteExperimentLimitById">
+        DELETE FROM experiment_limit WHERE experiment_id = #{experimentId}
     </delete>
 </mapper>

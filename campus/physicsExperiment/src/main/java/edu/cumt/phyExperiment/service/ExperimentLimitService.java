@@ -15,7 +15,7 @@ public interface ExperimentLimitService {
      * @param experimentId 查询的实验编号
      * @return 实验限选的学院代号，如果为null，表示该实验没有限选条件
      */
-    List<Integer> queryExperimentAllowSelectedColleges(int experimentId);
+    List<Long> queryExperimentAllowSelectedColleges(long experimentId);
 
     /**
      * 为某个实验添加限选学院
@@ -23,20 +23,20 @@ public interface ExperimentLimitService {
      * @param collegeConditions 添加的限选学院的代号
      * @return 添加限选条件的个数
      */
-    int addConditionAtExperiment(int experimentId, List<Integer> collegeConditions);
+    int addConditionAtExperiment(long experimentId, List<Long> collegeConditions);
 
     /**
-     * 删除实验的一个限选学院
+     * 删除实验的一个限选学院条件
      * @param experimentId 实验编号
      * @param collegeId 删除的限选学院代号
      * @return 1表示删除成功，0表示删除失败
      */
-    int moveConditionAtExperiment(int experimentId, int collegeId);
+    int moveConditionAtExperiment(long experimentId, long collegeId);
 
     /**
-     * 删除实验的所有限选学院
+     * 删除实验的所有限选学院条件
      * @param experimentId 实验编号
      * @return 删除的记录个数
      */
-    int moveAllConditionsAtExperiment(int experimentId);
+    int moveAllConditionsAtExperiment(long experimentId);
 }

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="edu.cumt.phyExperiment.dao.UserDao">
+    <!--学生相关SQL操作-->
+    <select id="queryStudentById" parameterType="int" resultType="edu.cumt.phyExperiment.entity.Student">
+        SELECT student_id, student_name, password, college_id, college_name
+        FROM student
+        WHERE student_id = #{studentId}
+    </select>
+    <select id="queryStudentByName" parameterType="String" resultType="edu.cumt.phyExperiment.entity.Student">
+        SELECT student_id, student_name, password, college_id, college_name
+        FROM student
+        WHERE student_name=#{name}
+    </select>
+    <select id="queryAllStudents" resultType="edu.cumt.phyExperiment.entity.Student">
+        SELECT student_id, student_name, password, college_id, college_name
+        FROM student
+    </select>
+    <select id="queryCollegerBy" resultType="edu.cumt.phyExperiment.entity.Student">
+        SELECT student_id, student_name, password, college_id, college_name
+        FROM student
+        WHERE college_id = #{collegeId}
+    </select>
+    <update id="updateStudentPassword">
+        UPDATE student
+        SET password = #{password}
+        WHERE student_id = #{studentId}
+    </update>
+
+    <!--教师相关SQL操作-->
+    <select id="queryTeacherById" parameterType="int" resultType="edu.cumt.phyExperiment.entity.Teacher">
+        SELECT teacher_id, teacher_name, password, college_id
+        FROM teacher
+        WHERE teacher_id = #{teacherId}
+    </select>
+    <select id="queryTeacherByName" parameterType="String" resultType="edu.cumt.phyExperiment.entity.Teacher">
+        SELECT teacher_id, teacher_name, password, college_id
+        FROM teacher
+        WHERE teacher_name = #{name}
+    </select>
+    <select id="queryAllTeachers" resultType="edu.cumt.phyExperiment.entity.Teacher">
+        SELECT teacher_id, teacher_name, password, college_id
+        FROM teacher
+    </select>
+    <select id="queryCollegeTeacherBy" resultType="edu.cumt.phyExperiment.entity.Teacher">
+        SELECT teacher_id, teacher_name, password, college_id
+        FROM teacher
+        WHERE college_id = #{collegeId}
+    </select>
+    <update id="updateTeacherPassword">
+        UPDATE teacher
+        SET password = #{password}
+        WHERE teacher_id = #{teacherId}
+    </update>
+
+</mapper>

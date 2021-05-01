@@ -15,14 +15,14 @@ public class ExperimentLimitServiceImpl implements ExperimentLimitService {
     ExperimentLimitDao experimentLimitDao;
 
     @Override
-    public List<Integer> queryExperimentAllowSelectedColleges(int experimentId) {
-        return experimentLimitDao.queryExperimentLimitCollegeIdBy(experimentId);
+    public List<Long> queryExperimentAllowSelectedColleges(long experimentId) {
+        return experimentLimitDao.queryExperimentLimitCollegeIdById(experimentId);
     }
 
     @Override
-    public int addConditionAtExperiment(int experimentId, List<Integer> collegeConditions) {
+    public int addConditionAtExperiment(long experimentId, List<Long> collegeConditions) {
         int result = 0;
-        for (Integer collegeId : collegeConditions) {
+        for (Long collegeId : collegeConditions) {
             if (collegeId != null) {
                 result += experimentLimitDao.insertCollegeLimit(experimentId, collegeId);
             }
@@ -31,12 +31,12 @@ public class ExperimentLimitServiceImpl implements ExperimentLimitService {
     }
 
     @Override
-    public int moveConditionAtExperiment(int experimentId, int collegeId) {
+    public int moveConditionAtExperiment(long experimentId, long collegeId) {
         return experimentLimitDao.deleteCollegeLimit(experimentId, collegeId);
     }
 
     @Override
-    public int moveAllConditionsAtExperiment(int experimentId) {
-        return experimentLimitDao.deleteExperimentLimitBy(experimentId);
+    public int moveAllConditionsAtExperiment(long experimentId) {
+        return experimentLimitDao.deleteExperimentLimitById(experimentId);
     }
 }

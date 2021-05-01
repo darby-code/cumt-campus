@@ -4,56 +4,267 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="edu.cumt.phyExperiment.dao.UserDao">
-    <!--学生相关SQL操作-->
-    <select id="queryStudentById" parameterType="int" resultType="edu.cumt.phyExperiment.entity.Student">
-        SELECT student_id, student_name, password, college_id, college_name
-        FROM student
-        WHERE student_id = #{studentId}
+    <sql id="student_base_column">
+        s.student_id,
+        s.student_name,
+        s.password,
+        c.college_id 'college.college_id',
+        c.college_name 'college.college_name',
+        c.description 'college.description',
+        s.class_info,
+        s.sex,
+        s.phone_number,
+        s.email,
+        s.qq,
+        s.state
+    </sql>
+    <sql id="teacher_base_column">
+        t.teacher_id,
+        t.teacher_name,
+        c.college_id 'college.college_id',
+        c.college_name 'college.college_name',
+        c.description 'college.description',
+        t.password,
+        t.sex,
+        t.phone_number,
+        t.email,
+        t.qq,
+        t.state
+    </sql>
+    <sql id="admin_base_column">
+        admin_id, account, password, name, sex, registry_time, phone_number, email, qq, state
+    </sql>
+
+    <!--学生-->
+    <select id="queryStudentById" resultType="edu.cumt.phyExperiment.entity.Student">
+        SELECT
+        <include refid="student_base_column" />
+        FROM student s INNER JOIN college c ON s.college_id = c.college_id
+        WHERE s.student_id = #{studentId}
     </select>
-    <select id="queryStudentByName" parameterType="String" resultType="edu.cumt.phyExperiment.entity.Student">
-        SELECT student_id, student_name, password, college_id, college_name
-        FROM student
-        WHERE student_name=#{name}
+    <select id="queryStudentByName" resultType="edu.cumt.phyExperiment.entity.Student">
+        SELECT
+        <include refid="student_base_column" />
+        FROM student s INNER JOIN college c ON s.college_id = c.college_id
+        WHERE s.student_name = #{studentName}
     </select>
     <select id="queryAllStudents" resultType="edu.cumt.phyExperiment.entity.Student">
-        SELECT student_id, student_name, password, college_id, college_name
-        FROM student
+        SELECT
+        <include refid="student_base_column" />
+        FROM student s INNER JOIN college c ON s.college_id = c.college_id
     </select>
     <select id="queryCollegerBy" resultType="edu.cumt.phyExperiment.entity.Student">
-        SELECT student_id, student_name, password, college_id, college_name
-        FROM student
-        WHERE college_id = #{collegeId}
+        SELECT
+        <include refid="student_base_column" />
+        FROM student s INNER JOIN college c ON s.college_id = c.college_id
+        WHERE s.college_id = #{collegeId}
     </select>
     <update id="updateStudentPassword">
         UPDATE student
         SET password = #{password}
         WHERE student_id = #{studentId}
     </update>
-
-    <!--教师相关SQL操作-->
-    <select id="queryTeacherById" parameterType="int" resultType="edu.cumt.phyExperiment.entity.Teacher">
-        SELECT teacher_id, teacher_name, password, college_id
-        FROM teacher
-        WHERE teacher_id = #{teacherId}
+    <update id="updateStudentInfo" parameterType="edu.cumt.phyExperiment.entity.Student">
+        UPDATE student
+        SET
+        <trim suffixOverrides=",">
+            <if test="sex != null">
+                sex = #{sex},
+            </if>
+            <if test="phoneNumber != null and phoneNumber != ''">
+                phone_number = #{phoneNumber},
+            </if>
+            <if test="email != null and email != ''">
+                email = #{email},
+            </if>
+            <if test="qq != null and qq != ''">
+                qq = #{qq},
+            </if>
+        </trim>
+        WHERE student_id = #{studentId}
+    </update>
+    <select id="queryStudentAccountState" resultType="int">
+        SELECT state FROM student WHERE student_id = #{studentId}
     </select>
-    <select id="queryTeacherByName" parameterType="String" resultType="edu.cumt.phyExperiment.entity.Teacher">
-        SELECT teacher_id, teacher_name, password, college_id
-        FROM teacher
-        WHERE teacher_name = #{name}
+    <update id="updateStudentAccountState">
+        UPDATE student
+        SET
+        <if test="state != null">
+            state = #{state}
+        </if>
+        WHERE student_id = #{studentId}
+    </update>
+
+    <!--教师-->
+    <select id="queryTeacherById" resultType="edu.cumt.phyExperiment.entity.Teacher">
+        SELECT
+        <include refid="teacher_base_column" />
+        FROM teacher t INNER JOIN college c ON t.college_id = c.college_id
+        WHERE t.teacher_id = #{teacherId}
+    </select>
+    <select id="queryTeacherByName" resultType="edu.cumt.phyExperiment.entity.Teacher">
+        SELECT
+        <include refid="teacher_base_column" />
+        FROM teacher t INNER JOIN college c ON t.college_id = c.college_id
+        WHERE t.teacher_name = #{teacherName}
     </select>
     <select id="queryAllTeachers" resultType="edu.cumt.phyExperiment.entity.Teacher">
-        SELECT teacher_id, teacher_name, password, college_id
-        FROM teacher
+        SELECT
+        <include refid="teacher_base_column" />
+        FROM teacher t INNER JOIN college c ON t.college_id = c.college_id
     </select>
     <select id="queryCollegeTeacherBy" resultType="edu.cumt.phyExperiment.entity.Teacher">
-        SELECT teacher_id, teacher_name, password, college_id
-        FROM teacher
-        WHERE college_id = #{collegeId}
+        SELECT
+        <include refid="teacher_base_column" />
+        FROM teacher t INNER JOIN college c ON t.college_id = c.college_id
+        WHERE t.college_id = #{collegeId}
     </select>
     <update id="updateTeacherPassword">
         UPDATE teacher
         SET password = #{password}
         WHERE teacher_id = #{teacherId}
     </update>
+    <update id="updateTeacherInfo" parameterType="edu.cumt.phyExperiment.entity.Teacher">
+        UPDATE teacher
+        SET
+        <trim suffixOverrides=",">
+            <if test="sex != null">
+                sex = #{sex},
+            </if>
+            <if test="phoneNumber != null and phoneNumber != ''">
+                phone_number = #{phoneNumber},
+            </if>
+            <if test="email != null and email != ''">
+                email = #{email},
+            </if>
+            <if test="qq != null and qq != ''">
+                qq = #{qq},
+            </if>
+        </trim>
+        WHERE teacher_id = #{teacherId}
+    </update>
+    <select id="queryTeacherAccountState" resultType="int">
+        SELECT state FROM teacher WHERE teacher_id = #{teacherId}
+    </select>
+    <update id="updateTeacherAccountState">
+        UPDATE teacher
+        SET
+        <if test="state != null">
+            state = #{state}
+        </if>
+        WHERE teacher_id = #{teacherId}
+    </update>
 
+    <!--管理员-->
+    <select id="queryAccountCount" resultType="int">
+        SELECT COUNT(*) FROM admin WHERE account = #{account};
+    </select>
+    <select id="queryAdminByAccount" resultType="edu.cumt.phyExperiment.entity.Admin">
+        SELECT
+        <include refid="admin_base_column" />
+        FROM admin
+        WHERE account = #{account}
+    </select>
+    <select id="queryAdminByAdminId" resultType="edu.cumt.phyExperiment.entity.Admin">
+        SELECT
+        <include refid="admin_base_column" />
+        FROM admin
+        WHERE admin_id = #{adminId}
+    </select>
+    <insert id="insertAdmin" parameterType="edu.cumt.phyExperiment.entity.Admin">
+        INSERT admin
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="account != null and account != ''">
+                account,
+            </if>
+            <if test="password != null and password != ''">
+                password,
+            </if>
+            <if test="name != null and name != ''">
+                name,
+            </if>
+            <if test="sex != null">
+                sex,
+            </if>
+            <if test="registryTime != null">
+                registry_time,
+            </if>
+            <if test="phoneNumber != null and phoneNumber != ''">
+                phone_number,
+            </if>
+            <if test="email != null and email != ''">
+                email,
+            </if>
+            <if test="qq != null and qq != ''">
+                qq,
+            </if>
+            <if test="state != null">
+                state
+            </if>
+        </trim>
+        <trim prefix="VALUES(" suffix=")" suffixOverrides=",">
+            <if test="account != null and account != ''">
+                #{account},
+            </if>
+            <if test="password != null and password != ''">
+                #{password},
+            </if>
+            <if test="name != null and name != ''">
+                #{name},
+            </if>
+            <if test="sex != null">
+                #{sex},
+            </if>
+            <if test="registryTime != null">
+                #{registryTime},
+            </if>
+            <if test="phoneNumber != null and phoneNumber != ''">
+                #{phoneNumber},
+            </if>
+            <if test="email != null and email != ''">
+                #{email},
+            </if>
+            <if test="qq != null and qq != ''">
+                #{qq},
+            </if>
+            <if test="state != null">
+                #{state}
+            </if>
+        </trim>
+    </insert>
+    <update id="updateAdminPassword">
+        UPDATE admin
+        SET password = #{password}
+        WHERE account = #{account}
+    </update>
+    <update id="updateAdminInfo" parameterType="edu.cumt.phyExperiment.entity.Admin">
+        UPDATE admin
+        SET
+        <trim suffixOverrides=",">
+            <if test="sex != null">
+                sex = #{sex},
+            </if>
+            <if test="phoneNumber != null and phoneNumber != ''">
+                phone_number = #{phoneNumber},
+            </if>
+            <if test="email != null and email != ''">
+                email = #{email},
+            </if>
+            <if test="qq != null and qq != ''">
+                qq = #{qq},
+            </if>
+        </trim>
+        WHERE account = #{account}
+    </update>
+    <select id="queryAdminAccountState" resultType="int">
+        SELECT state FROM admin WHERE account = #{account}
+    </select>
+    <update id="updateAdminAccountState">
+        UPDATE admin
+        SET state = #{state}
+        WHERE account = #{account}
+    </update>
+    <delete id="deleteAdminByAccount">
+        DELETE FROM admin WHERE account = #{account}
+    </delete>
 </mapper>

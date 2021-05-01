@@ -15,27 +15,27 @@ public class ExperimentLimitDaoTest extends BaseTest {
 
     @Test
     public void queryExperimentLimitCollegeIdBy() {
-        int experimentId = 1012;
-        List<Integer> list = experimentLimitDao.queryExperimentLimitCollegeIdBy(experimentId);
+        int experimentId = 1011;
+        List<Long> list = experimentLimitDao.queryExperimentLimitCollegeIdById(experimentId);
         System.out.println(list);
     }
 
     @Test
     public void insertCollegeLimit() {
-        int result = experimentLimitDao.insertCollegeLimit(1009, 10012);
+        int result = experimentLimitDao.insertCollegeLimit(1009L, 100115L);
         System.out.println(result);
     }
 
     @Test
     public void deleteCollegeLimit() {
-        int result = experimentLimitDao.deleteCollegeLimit(1009, 10013);
+        int result = experimentLimitDao.deleteCollegeLimit(1009L, 100115L);
         System.out.println(result);
     }
 
     @Test
     public void deleteExperimentLimitBy() {
-        int experimentId = 1009;
-        int result = experimentLimitDao.deleteExperimentLimitBy(experimentId);
+        long experimentId = 1009L;
+        int result = experimentLimitDao.deleteExperimentLimitById(experimentId);
         System.out.println(result);
     }
 }

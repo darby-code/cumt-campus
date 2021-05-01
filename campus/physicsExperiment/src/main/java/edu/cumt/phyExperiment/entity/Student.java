@@ -5,43 +5,65 @@ package edu.cumt.phyExperiment.entity;
  */
 public class Student {
     /**
-     * 学生学号
+     * 学生学号, 唯一，非自增，非空
      */
-    private Integer studentId;
+    private Long studentId;
     /**
-     * 学生姓名
+     * 学生姓名，非空
      */
     private String studentName;
     /**
-     * 学生登录密码，初始密码为学号
+     * 学生登录密码，初始密码为学号，非空
      */
     private String password;
     /**
-     * 学生所属学院代号
+     * 学生所属学院，非空
      */
-    private Integer collegeId;
+    private College college;
     /**
-     * 学生所属学院名称
+     * 学生所在年级、班级信息，非空
      */
-    private String collegeName;
+    private String classInfo;
+    /**
+     * 学生性别，非空
+     */
+    private Boolean sex;
+    /**
+     * 学生手机号，非空
+     */
+    private String phoneNumber;
+    /**
+     * 学生邮箱
+     */
+    private String email;
+    /**
+     * 学生QQ
+     */
+    private String qq;
+    /**
+     * 学生账号权限，便于后续开发
+     */
+    private Integer state;
 
     public Student() {}
 
-    public Student(Integer studentId, String studentName, String password
-            , Integer collegeId, String collegeName) {
+    public Student(Long studentId, String studentName, String password, College college
+            , String classInfo, Boolean sex, String phoneNumber) {
         this.studentId = studentId;
         this.studentName = studentName;
         this.password = password;
-        this.collegeId = collegeId;
-        this.collegeName = collegeName;
+        this.college = college;
+        this.classInfo = classInfo;
+        this.sex = sex;
+        this.phoneNumber = phoneNumber;
     }
 
     /*****************Getter和Setter以及toString方法*************************/
-    public Integer getStudentId() {
+    public Long getStudentId() {
         return studentId;
     }
 
-    public void setStudentId(Integer studentId) {
+    public void setStudentId(Long studentId) {
         this.studentId = studentId;
     }
 
@@ -61,20 +83,60 @@ public class Student {
         this.password = password;
     }
 
-    public Integer getCollegeId() {
-        return collegeId;
+    public College getCollege() {
+        return college;
     }
 
-    public void setCollegeId(Integer collegeId) {
-        this.collegeId = collegeId;
+    public void setCollege(College college) {
+        this.college = college;
     }
 
-    public String getCollegeName() {
-        return collegeName;
+    public String getClassInfo() {
+        return classInfo;
     }
 
-    public void setCollegeName(String collegeName) {
-        this.collegeName = collegeName;
+    public void setClassInfo(String classInfo) {
+        this.classInfo = classInfo;
+    }
+
+    public Boolean getSex() {
+        return sex;
+    }
+
+    public void setSex(Boolean sex) {
+        this.sex = sex;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getQq() {
+        return qq;
+    }
+
+    public void setQq(String qq) {
+        this.qq = qq;
+    }
+
+    public Integer getState() {
+        return state;
+    }
+
+    public void setState(Integer state) {
+        this.state = state;
     }
 
     @Override
@@ -83,8 +145,13 @@ public class Student {
                 "studentId=" + studentId +
                 ", studentName='" + studentName + '\'' +
                 ", password='" + password + '\'' +
-                ", collegeId=" + collegeId +
-                ", collegeName='" + collegeName + '\'' +
-                '}' + "\n";
+                ", college=" + college +
+                ", classInfo='" + classInfo + '\'' +
+                ", sex=" + sex +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", email='" + email + '\'' +
+                ", qq='" + qq + '\'' +
+                ", state=" + state +
+                '}';
     }
 }

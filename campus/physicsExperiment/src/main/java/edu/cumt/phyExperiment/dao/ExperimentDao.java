@@ -9,56 +9,63 @@ import java.util.List;
 
 public interface ExperimentDao {
     /**
+     * 查询所有实验
+     * @return
+     */
+    List<Experiment> queryAllExperiments();
+
+    /**
+     * 查询还允许选课的实验
+     * @return
+     */
+    List<Experiment> queryAllowSelectedExperiments();
+
+    /**
+     * 查询已经截止选课的实验
+     * @return
+     */
+    List<Experiment> queryNotAllowSelectedExperiments();
+
+    /**
+     * 查询已经结束，出成绩的实验
+     * @return
+     */
+    List<Experiment> queryFinishedExperiments();
+
+    /**
      * 根据教师工号查询教师的实验
      * @param teacherId
      * @return
      */
-    List<Experiment> queryTeacherExperimentBy(int teacherId);
+    List<Experiment> queryTeacherExperiments(long teacherId);
+
+    /**
+     * 根据关键词查找实验
+     * @param words
+     * @return
+     */
+    List<Experiment> queryExperimentsByKeyWords(String words);
 
     /**
      * 根据实验编号查询实验
      * @param experimentId
      * @return
      */
-    Experiment queryExperimentById(int experimentId);
+    Experiment queryExperimentById(long experimentId);
 
     /**
-     * 根据实验名称查找实验，可能会返回多个结果
-     * @param name
-     * @return
-     */
-    List<Experiment> queryExperimentByName(String name);
-
-    /**
-     * 查询还没有选满和允许选的实验
-     * @return
-     */
-    List<Experiment> queryAllowSelectedExperiments();
-
-    /**
-     * 查询已经选满的实验
-     * @return
-     */
-    List<Experiment> queryNotAllowSelectedExperiments();
-
-    /**
-     * 查询已经结课的实验
-     * @return
-     */
-    List<Experiment> queryFinishedExperiments();
-
-    /**
-     * 查询还没有结课的实验
-     * @return
-     */
-    List<Experiment> queryNotFinishedExperiments();
-
-    /**
-     * 根据实验编号查询实验是否结课
+     * 获取实验的日期
      * @param experimentId
      * @return
      */
-    boolean queryExperimentIsFinished(int experimentId);
+    Date queryExperimentDateById(long experimentId);
+
+    /**
+     * 根据实验名称查询实验
+     * @param experimentName
+     * @return
+     */
+    List<Experiment> queryExperimentByName(String experimentName);
 
     /**
      * 查询最大的实验编号
@@ -67,46 +74,25 @@ public interface ExperimentDao {
     int queryMaxExperimentId();
 
     /**
-     * 查询所有实验
+     * 修改实验的信息
+     * @param experiment
      * @return
      */
-    List<Experiment> queryAllExperiments();
-
-    /**
-     * 修改实验上课时间
-     * @param time
-     * @return
-     */
-    int updateExperimentTime(@Param("experimentId") int experimentId, @Param("experimentTime") Date time);
-
-    /**
-     * 修改实验上课地址
-     * @param place
-     * @return
-     */
-    int updateExperimentPlace(@Param("experimentId") int experimentId, @Param("experimentPlace") String place);
-
-    /**
-     * 修改实验容量
-     * @param experimentId
-     * @param capacity
-     * @return
-     */
-    int updateExperimentCapacity(@Param("experimentId") int experimentId, @Param("capacity") int capacity);
+    int updateExperimentInfo(Experiment experiment);
 
     /**
      * 实验已选容量加1
      * @param experimentId
      * @return
      */
-    int experimentSelectedNumberPlusOne(int experimentId);
+    int experimentSelectedNumberPlusOne(long experimentId);
 
     /**
      * 实验已选容量减1
      * @param experimentId
      * @return
      */
-    int experimentSelectedNumberReduceOne(int experimentId);
+    int experimentSelectedNumberReduceOne(long experimentId);
 
     /**
      * 新增一个新的实验
@@ -120,5 +106,20 @@ public interface ExperimentDao {
      * @param experimentId
      * @return
      */
-    int deleteExperimentBy(int experimentId);
+    int deleteExperimentBy(long experimentId);
+
+    /**
+     * 截止一个实验的选课
+     * @param experimentId
+     * @return
+     */
+    int setExperimentNotAllowSelected(long experimentId);
+
+    /**
+     * 教师录完成绩后，实验置为结束状态
+     * 供学生查询成绩
+     * @param experimentId
+     * @return
+     */
+    int setExperimentFinished(long experimentId);
 }

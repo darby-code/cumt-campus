@@ -2,11 +2,14 @@ package edu.cumt.phyExperiment.dao;
 
 
 import edu.cumt.phyExperiment.BaseTest;
+import edu.cumt.phyExperiment.entity.Admin;
 import edu.cumt.phyExperiment.entity.Student;
 import edu.cumt.phyExperiment.entity.Teacher;
+import edu.cumt.phyExperiment.enums.SexEnum;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.Date;
 import java.util.List;
 
 public class UserDaoTest extends BaseTest {
@@ -15,7 +18,7 @@ public class UserDaoTest extends BaseTest {
 
     @Test
     public void queryStudentById() {
-        int studentId = 100111012;
+        long studentId = 1001011012;
         Student student = userDao.queryStudentById(studentId);
         System.out.println(student);
     }
@@ -35,18 +38,35 @@ public class UserDaoTest extends BaseTest {
 
     @Test
     public void queryCollegerBy() {
-        int collegeId = 10013;
+        int collegeId = 100103;
         List<Student> students = userDao.queryCollegerBy(collegeId);
         System.out.println(students);
     }
 
     @Test
     public void updateStudentPassword() {
-        Student student = new Student(100111012, "李荣省", "123456", 10011, "矿业学院");
-        int result = userDao.updateStudentPassword(student.getStudentId(), student.getPassword());
-        System.out.println(userDao.queryStudentById(100111012));
-        student = new Student(100111012, "李荣省", "100111012", 10011, "矿业学院");
-        userDao.updateStudentPassword(student.getStudentId(), student.getPassword());
+        long studentId = 1001011013L;
+        int result = userDao.updateStudentPassword(studentId, "123456789");
+        System.out.println(result);
+    }
+
+    @Test
+    public void updateStudentInfo() {
+        Student student = new Student(1001011013L, "黄敏威", "h8519522*", null, null, false, "15162136037");
+        int result = userDao.updateStudentInfo(student);
+        System.out.println(result);
+    }
+
+    @Test
+    public void queryStudentAccountState() {
+        int result = userDao.queryStudentAccountState(1001011013L);
+        System.out.println(result);
+    }
+
+    @Test
+    public void updateStudentAccountState() {
+        int result = userDao.updateStudentAccountState(1001011013L, 3);
+        System.out.println(result);
     }
 
     @Test
@@ -71,19 +91,98 @@ public class UserDaoTest extends BaseTest {
 
     @Test
     public void queryCollegeTeacherBy() {
-        int collegeId = 10025;
+        int collegeId = 100115;
         List<Teacher> list = userDao.queryCollegeTeacherBy(collegeId);
         System.out.println(list);
     }
 
     @Test
     public void updateTeacherPassword() {
-        Teacher teacher = new Teacher(1002501, "张伦", "123456", 10025);
-        int result = userDao.updateTeacherPassword(teacher.getTeacherId(), teacher.getPassword());
+        long teacherId = 1002501L;
+        int result = userDao.updateTeacherPassword(teacherId, "123456789");
         System.out.println(result);
-        teacher = new Teacher(1002501, "张伦", "1002501", 10025);
-        userDao.updateTeacherPassword(teacher.getTeacherId(), teacher.getPassword());
     }
 
+    @Test
+    public void updateTeacherInfo() {
+        Teacher teacher = new Teacher();
+        teacher.setTeacherId(1002501L);
+        teacher.setPhoneNumber("13306002932");
+        teacher.setEmail("zhanglun@cumt.com");
+        int result = userDao.updateTeacherInfo(teacher);
+        System.out.println(result);
+    }
 
+    @Test
+    public void queryTeacherAccountState() {
+        int result = userDao.queryTeacherAccountState(1002501L);
+        System.out.println(result);
+    }
+
+    @Test
+    public void updateTeacherAccountState() {
+        int result = userDao.updateTeacherAccountState(1002501L, 3);
+        System.out.println(result);
+    }
+
+    @Test
+    public void queryAccountCount() {
+        int result = userDao.queryAccountCount("dougMagic");
+        System.out.println(result);
+        result = userDao.queryAccountCount("dougWilson");
+        System.out.println(result);
+    }
+
+    @Test
+    public void queryAdminByAccount() {
+        Admin admin = userDao.queryAdminByAccount("dougMagic");
+        System.out.println(admin);
+        admin = userDao.queryAdminByAccount("dougWilson");
+        System.out.println(admin);
+    }
+
+    @Test
+    public void queryAdminByAdminId() {
+        Admin admin = userDao.queryAdminByAccount("dougMagic");
+        admin = userDao.queryAdminByAdminId(admin.getAdminId());
+        System.out.println(admin);
+    }
+
+    @Test
+    public void insertAdmin() {
+        Admin admin = new Admin("dougWilson", "h8519522*", "doug", false, new Date(), "15162136037");
+        int result = userDao.insertAdmin(admin);
+        System.out.println(result);
+    }
+
+    @Test
+    public void updateAdminPassword() {
+        int result = userDao.updateAdminPassword("dougWilson", "huang090900");
+        System.out.println(result);
+    }
+
+    @Test
+    public void updateAdminInfo() {
+        Admin admin = new Admin("dougWilson", "h8519522*", "doug", false, new Date(), "15162136037");
+        int result = userDao.updateAdminInfo(admin);
+        System.out.println(result);
+    }
+
+    @Test
+    public void queryAdminAccountState() {
+        int result = userDao.queryAdminAccountState("dougMagic");
+        System.out.println(result);
+    }
+
+    @Test
+    public void updateAdminAccountState() {
+        int result = userDao.updateAdminAccountState("dougMagic", 4);
+        System.out.println(result);
+    }
+
+    @Test
+    public void deleteAdminByAccount() {
+        int result = userDao.deleteAdminByAccount("dougWilson");
+        System.out.println(result);
+    }
 }

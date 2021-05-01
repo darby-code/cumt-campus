@@ -5,83 +5,129 @@
 
 <mapper namespace="edu.cumt.phyExperiment.dao.ExperimentDao">
     <sql id="base_column_list">
-        experiment_id, experiment_name, experiment_time, experiment_place, capacity,
-        teacher_id, selected_number, allowSelected, finished
+        e.experiment_id,
+        e.experiment_name,
+        e.experiment_time,
+        e.week_day,
+        e.experiment_place,
+        t.teacher_id,
+        t.teacher_name,
+        t.phone_number,
+        e.capacity,
+        e.selected_number,
+        e.allowSelected,
+        e.finished,
+        e.state
     </sql>
-    <select id="queryTeacherExperimentBy" resultType="edu.cumt.phyExperiment.entity.Experiment">
-        SELECT <include refid="base_column_list"/>
-        FROM experiment WHERE teacher_id = #{teacherId}
-    </select>
-    <select id="queryExperimentById" parameterType="int" resultType="edu.cumt.phyExperiment.entity.Experiment">
-         SELECT <include refid="base_column_list"/>
-         FROM experiment WHERE experiment_id = #{experimentId}
-    </select>
-    <select id="queryExperimentByName" parameterType="String" resultType="edu.cumt.phyExperiment.entity.Experiment">
-         SELECT <include refid="base_column_list"/>
-         FROM experiment WHERE experiment_name LIKE CONCAT('%',#{experimentId},'%')
+    <select id="queryAllExperiments" resultType="edu.cumt.phyExperiment.entity.Experiment">
+        SELECT
+        <include refid="base_column_list" />
+        FROM experiment e INNER JOIN teacher t ON e.teacher_id = t.teacher_id
     </select>
     <select id="queryAllowSelectedExperiments" resultType="edu.cumt.phyExperiment.entity.Experiment">
-        SELECT <include refid="base_column_list"/>
-        FROM experiment WHERE allowSelected = 1
+        SELECT
+        <include refid="base_column_list" />
+        FROM experiment e INNER JOIN teacher t ON e.teacher_id = t.teacher_id
+        WHERE e.allowSelected = 1
     </select>
-    <select id="queryNotAllowSelectedExperiments" resultType="edu.cumt.phyExperiment.entity.Experiment">
-        SELECT <include refid="base_column_list"/>
-        FROM experiment WHERE allowSelected = 0
-    </select>
-    <select id="queryFinishedExperiments" resultType="edu.cumt.phyExperiment.entity.Experiment">
-        SELECT <include refid="base_column_list"/>
-        FROM experiment WHERE finished = 1
-    </select>
-    <select id="queryNotFinishedExperiments" resultType="edu.cumt.phyExperiment.entity.Experiment">
-        SELECT <include refid="base_column_list"/>
-        FROM experiment WHERE finished = 0
-    </select>
-    <select id="queryExperimentIsFinished" resultType="boolean">
-        SELECT finished FROM experiment WHERE experiment_id = #{experimentId}
-    </select>
-    <select id="queryMaxExperimentId" resultType="Integer">
-         SELECT experiment_id FROM experiment ORDER BY experiment_id DESC LIMIT 1
-    </select>
-    <select id="queryAllExperiments" resultType="edu.cumt.phyExperiment.entity.Experiment">
-         SELECT <include refid="base_column_list"/>
-         FROM experiment
-    </select>
-    <update id="updateExperimentTime">
+     <select id="queryNotAllowSelectedExperiments" resultType="edu.cumt.phyExperiment.entity.Experiment">
+        SELECT
+        <include refid="base_column_list" />
+        FROM experiment e INNER JOIN teacher t ON e.teacher_id = t.teacher_id
+        WHERE e.allowSelected = 0
+     </select>
+     <select id="queryFinishedExperiments" resultType="edu.cumt.phyExperiment.entity.Experiment">
+        SELECT
+        <include refid="base_column_list" />
+        FROM experiment e INNER JOIN teacher t ON e.teacher_id = t.teacher_id
+        WHERE e.finished = 1
+     </select>
+     <select id="queryTeacherExperiments" resultType="edu.cumt.phyExperiment.entity.Experiment">
+        SELECT
+        <include refid="base_column_list" />
+        FROM experiment e INNER JOIN teacher t ON e.teacher_id = t.teacher_id
+        WHERE e.teacher_id = #{teacherId}
+     </select>
+     <select id="queryExperimentsByKeyWords" resultType="edu.cumt.phyExperiment.entity.Experiment">
+        SELECT
+        <include refid="base_column_list" />
+        FROM experiment e INNER JOIN teacher t ON e.teacher_id = t.teacher_id
+        WHERE
+        <if test="words != null and words != ''">
+            e.experiment_name REGEXP #{words} || e.week_day REGEXP #{words} || e.experiment_place REGEXP #{words}
+        </if>
+     </select>
+     <select id="queryExperimentById" resultType="edu.cumt.phyExperiment.entity.Experiment">
+         SELECT
+         <include refid="base_column_list" />
+         FROM experiment e INNER JOIN teacher t ON e.teacher_id = t.teacher_id
+         WHERE
+         experiment_id = #{experimentId}
+     </select>
+     <select id="queryExperimentDateById" resultType="java.util.Date">
+        SELECT experiment_time FROM experiment WHERE experiment_id = #{experimentId}
+     </select>
+     <select id="queryExperimentByName" resultType="edu.cumt.phyExperiment.entity.Experiment">
+         SELECT
+         <include refid="base_column_list" />
+         FROM experiment e INNER JOIN teacher t ON e.teacher_id = t.teacher_id
+         WHERE
+         experiment_name = #{experimentName}
+     </select>
+     <select id="queryMaxExperimentId" resultType="int">
+         SELECT
+         experiment_id
+         FROM experiment ORDER BY experiment_id DESC LIMIT 1
+     </select>
+     <update id="updateExperimentInfo" parameterType="edu.cumt.phyExperiment.entity.Experiment">
         UPDATE experiment
         SET
-        experiment_time = #{experimentTime}
+        <if test="experimentName != null and experimentName != ''">
+            experiment_name = #{experimentName},
+        </if>
+        <if test="experimentTime != null">
+            experiment_time = #{experimentTime},
+        </if>
+        <if test="weekDay != null and weekDay != ''">
+            week_day = #{weekDay},
+        </if>
+        <if test="experimentPlace != null and experimentPlace != ''">
+            experiment_place = #{experimentPlace},
+        </if>
+        <if test="capacity != 0">
+            capacity = #{capacity}
+        </if>
         WHERE experiment_id = #{experimentId}
-    </update>
-    <update id="updateExperimentPlace">
-        UPDATE experiment
-        SET
-        experiment_place = #{experimentPlace}
-        WHERE experiment_id = #{experimentId}
-    </update>
-    <update id="updateExperimentCapacity">
-        UPDATE experiment
-        SET
-        capacity = #{capacity}
-        WHERE experiment_id = #{experimentId}
-    </update>
+     </update>
     <update id="experimentSelectedNumberPlusOne">
         UPDATE experiment
         SET selected_number = selected_number + 1
-        WHERE experiment_id = #{experimentId}
+        WHERE experiment_id = #{experimentId} AND selected_number &lt; capacity
     </update>
     <update id="experimentSelectedNumberReduceOne">
         UPDATE experiment
         SET selected_number = selected_number - 1
-        WHERE experiment_id = #{experimentId}
+        WHERE experiment_id = #{experimentId} AND selected_number &gt;= 1
     </update>
     <insert id="insertExperiment" parameterType="edu.cumt.phyExperiment.entity.Experiment">
-        INSERT experiment (experiment_name, experiment_time, experiment_place
-        , capacity, teacher_id, selected_number, allowSelected, finished)
+        INSERT experiment (experiment_name, experiment_time, week_day, experiment_place
+        , teacher_id, capacity)
         VALUES
-        (#{experimentName}, #{experimentTime}, #{experimentPlace}, #{capacity}
-        , #{teacherId}, #{selectedNumber}, #{allowSelected}, #{finished})
+        (#{experimentName}, #{experimentTime}, #{weekDay}, #{experimentPlace}, #{teacherId}, #{capacity})
     </insert>
     <delete id="deleteExperimentBy">
         DELETE FROM experiment WHERE experiment_id = #{experimentId}
     </delete>
+    <update id="setExperimentNotAllowSelected">
+        UPDATE experiment
+        SET
+        allowSelected = 0
+        WHERE experiment_id = #{experimentId}
+    </update>
+    <update id="setExperimentFinished">
+        UPDATE experiment
+        SET
+        finished = 1
+        WHERE experiment_id = #{experimentId}
+    </update>
 </mapper>
