@@ -1,6 +1,7 @@
 package edu.cumt.phyExperiment.service;
 
 import edu.cumt.phyExperiment.entity.Experiment;
+import edu.cumt.phyExperiment.entity.ExperimentSelected;
 
 import java.util.Date;
 import java.util.List;
@@ -111,4 +112,16 @@ public interface ExperimentService {
      * @return
      */
     int setExperimentFinished(long experimentId);
+
+    /**
+     * 查询所有的实验名称
+     * @return
+     */
+    List<String> queryExperimentName();
+
+    /**
+     * 查询所有的上课教室
+     * @return
+     */
+    List<String> queryExperimentPlace();
 }

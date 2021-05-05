@@ -38,13 +38,13 @@
                         <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="studentInfoMenu" data-bs-parent="#totalMenu">
                             <div class="accordion-body">
                                 <div class="row">
-                                    <button type="button" id="studentQueryScore" class="btn btn-outline-secondary btn-lg">实验成绩查询</button>
+                                    <button type="button" id="studentQueryScore" onclick="showStudentScores('experiment/studentScore.do?studentId=${role.studentId}')" class="btn btn-outline-secondary btn-lg">实验成绩查询</button>
                                 </div>
                                 <div class="row">
-                                    <button type="button" id="studentSelfInfo" class="btn btn-outline-secondary btn-lg">个人信息查询</button>
+                                    <button type="button" id="studentSelfInfo" onclick="showStudentInfo('user/studentInfo.do?studentId=${role.studentId}', this)" class="btn btn-outline-secondary btn-lg">个人信息查询</button>
                                 </div>
                                 <div class="row">
-                                    <button type="button" id="studentUpdatePassword" class="btn btn-outline-secondary btn-lg">密码修改</button>
+                                    <button type="button" id="studentUpdatePassword" onclick="showUpdatePasswordBox('user/showUpdatePasswordBox.do?role=student&roleInfo=${role.studentId}');" class="btn btn-outline-secondary btn-lg">密码修改</button>
                                 </div>
                             </div>
                         </div>
@@ -67,6 +67,287 @@
     </div>
     <!--用于在显示区显示-->
     <script type="text/javascript">
+        //显示密码修改界面
+        function showUpdatePasswordBox(urlPath) {
+            document.getElementById("searchContent").innerHTML = "";
+            showAtRight(urlPath);
+        }
+
+        function checkOldPassword() {
+            var oldPasswordObj = document.getElementById("oldPassword");
+            var oldPasswordTipObj = document.getElementById("oldPasswordTip");
+            if (oldPasswordObj.value == '') {
+                oldPasswordObj.className = "form-control is-invalid";
+                oldPasswordTipObj.innerHTML = "该项为必填项！";
+                return false;
+            }
+            if (oldPasswordObj.value.length < 7) {
+                oldPasswordObj.className = "form-control is-invalid";
+                oldPasswordTipObj.innerHTML = "密码长度大于7位，请检查！";
+                return false;
+            }
+            if(oldPasswordObj.value != ${role.password}) {
+                oldPasswordObj.className = "form-control is-invalid";
+                oldPasswordTipObj.innerHTML = "输入与登录密码不符！";
+                return false;
+            }
+            oldPasswordObj.className = "form-control";
+            oldPasswordTipObj.innerHTML = "";
+            return true;
+        }
+
+        function checkNewPassword() {
+            var oldPasswordObj = document.getElementById("oldPassword");
+            var newPasswordObj = document.getElementById("newPassword");
+            var newPasswordTipObj = document.getElementById("newPasswordTip");
+            var reg = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{7,16}$/;
+            if (newPasswordObj.value == '') {
+                newPasswordObj.className = "form-control is-invalid";
+                newPasswordTipObj.innerHTML = "该项为必填项！";
+                return false;
+            }
+            if (newPasswordObj.value.length < 7) {
+                newPasswordObj.className = "form-control is-invalid";
+                newPasswordTipObj.innerHTML = "密码长度应大于7位，请检查！";
+                return false;
+            }
+            if (oldPasswordObj.value == newPasswordObj.value) {
+                newPasswordObj.className = "form-control is-invalid";
+                newPasswordTipObj.innerHTML = "新密码不能与原始密码相同";
+                return false;
+            }
+            if (!reg.test(newPasswordObj.value)) {
+                newPasswordObj.className = "form-control is-invalid";
+                newPasswordTipObj.innerHTML = "密码必须为数字与字母的组合，不能含有特殊字符，并且不能为纯数字或纯字母";
+                return false;
+            }
+            newPasswordObj.className = "form-control";
+            newPasswordTipObj.innerHTML = "";
+            return true;
+        }
+
+        function checkCheckPassword() {
+            var newPasswordObj = document.getElementById("newPassword");
+            var checkPasswordObj = document.getElementById("checkPassword");
+            var checkPasswordTipObj = document.getElementById("checkPasswordTip");
+            if (checkPasswordObj.value == '') {
+                checkPasswordObj.className = "form-control is-invalid";
+                checkPasswordTipObj.innerHTML = "该项为必填项！";
+                return false;
+            }
+            if (checkPasswordObj.value != newPasswordObj.value) {
+                checkPasswordObj.className = "form-control is-invalid";
+                checkPasswordTipObj.innerHTML = "两次密码输入不同";
+                return false;
+            }
+            checkPasswordObj.className = "form-control";
+            checkPasswordTipObj.innerHTML = "";
+            return true;
+        }
+
+        function updatePassword(clickObj) {
+            if (checkOldPassword() && checkNewPassword() && checkCheckPassword()) {
+                if (confirm('确认要修改密码吗？')) {
+                    var urlPath = clickObj.action + 'oldPassword=' + document.getElementById('oldPassword').value
+                        + '&newPassword=' + document.getElementById('newPassword').value;
+                    var xmlhttp;
+                    if (window.XMLHttpRequest) {
+                        //通用浏览器,如Firefox Chrome  Safari
+                        xmlhttp = new XMLHttpRequest();
+                    } else {
+                        //IE浏览器
+                        xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+                    }
+                    xmlhttp.onreadystatechange = function () {
+                        if (xmlhttp.readyState == 4 && (xmlhttp.status >= 200 && xmlhttp.status < 300)) {
+                            //接收到服务器端返回的JSON对象
+                            var obj = JSON.parse(xmlhttp.responseText);
+                            if (obj.success) {
+                                //成功则更新数据
+                                alert(obj.message);
+                                //清空已填项
+                                document.getElementById("oldPassword").value = '';
+                                document.getElementById("newPassword").value= '';
+                                document.getElementById("checkPassword").value = '';
+                                //防止频繁点击
+                                var updatePasswordBtn = document.getElementById("updatePasswordBtn");
+                                updatePasswordBtn.disabled = true;
+                                alert("请重新登录");
+                                setTimeout(window.location.href='userLogin/index.do', 4000);
+                                // updatePasswordBtn.attachEvent('onclick', window.location.href='userLogin/index.do');
+                            } else {
+                                //告知异常
+                                alert(obj.message);
+                            }
+                        } else if (xmlhttp.readyState == 4 && xmlhttp.status == 404) {
+                            alert("发生了一个未知的错误")
+                        }
+                    }
+                    xmlhttp.open("POST", urlPath, true);
+                    xmlhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                    xmlhttp.send();
+                }
+            }
+        }
+
+        function setPasswordUpdateBtnNotDisable() {
+            document.getElementById("updatePasswordBtn").disabled = false;
+
+        }
+
+        //显示学生个人信息界面
+        function showStudentInfo(urlPath, clickObj) {
+            document.getElementById("searchContent").innerHTML = "";
+            showAtRight(urlPath);
+            clickObj.disabled = true;
+            //10秒内不可再次查询
+            setTimeout(function () {
+                clickObj.disabled = false;
+            }, 10000);
+        }
+
+        function checkPhone() {
+            var check = true;
+            var reg = /^1[0-9]{10}$/;
+            var phoneNumber = document.getElementById("phoneNumber");
+            if (!reg.test(phoneNumber.value)) {
+                check = false;
+                //检查不通过，提示非法
+                phoneNumber.className = "form-control is-invalid";
+                return check;
+            }
+            //检查通过，is-invalid取消
+            phoneNumber.className = "form-control";
+            return check;
+        }
+
+        function checkEmail() {
+            var check = true;
+            var reg = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
+            var email = document.getElementById("email");
+            if (!reg.test(email.value)) {
+                check = false;
+                //检查不通过，提示非法
+                email.className = "form-control is-invalid";
+                return check;
+            }
+            //检查通过，is-invalid取消
+            email.className = "form-control";
+            return check;
+        }
+
+        function checkQQ() {
+            var check = true;
+            var reg = /[0-9]{8,}$/;
+            var qq = document.getElementById("qq");
+            if (!reg.test(qq.value)) {
+                check = false;
+                //检查不通过，提示非法
+                qq.className = "form-control is-invalid";
+                return check;
+            }
+            //检查通过，is-invalid取消
+            qq.className = "form-control";
+            return check;
+        }
+
+        function checkPhoneEmailQQ() {
+            if (checkPhone() && checkEmail() && checkQQ()) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        //监听控件内容是否变化，无变化不提交
+        function changeAndSetNotDisabled() {
+            document.getElementById("updateInfoBtn").disabled = false;
+        }
+
+        //修改个人信息
+        function updateInfo(clickObj) {
+            var urlPath = clickObj.action + formSerialize(clickObj);
+            if (!checkPhoneEmailQQ()) {
+                alert("请检查输入信息");
+                return;
+            }
+            if (confirm("确认修改个人信息吗？")) {
+                var xmlhttp;
+                if (window.XMLHttpRequest) {
+                    //通用浏览器,如Firefox Chrome  Safari
+                    xmlhttp = new XMLHttpRequest();
+                } else {
+                    //IE浏览器
+                    xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+                }
+                xmlhttp.onreadystatechange = function () {
+                    if (xmlhttp.readyState == 4 && (xmlhttp.status >= 200 && xmlhttp.status < 300)) {
+                        //接收到服务器端返回的JSON对象
+                        var obj = JSON.parse(xmlhttp.responseText);
+                        if (obj.success) {
+                            //成功则更新数据
+                            alert("修改个人信息成功")
+                            document.getElementById("phoneNumber").innerHTML = obj.phoneNumber;
+                            document.getElementById("email").innerHTML = obj.email;
+                            document.getElementById("qq").innerHTML = obj.qq;
+                            //防止频繁点击
+                            var updateInfoBtn = document.getElementById("updateInfoBtn");
+                            updateInfoBtn.disabled = true;
+                            setTimeout(function () {
+                                updateInfoBtn.disabled = false;
+                            }, 5000);
+                        } else {
+                            //告知异常
+                            alert(obj.message);
+                        }
+                    } else if (xmlhttp.readyState == 4 && xmlhttp.status == 404) {
+                        alert("发生了一个未知的错误")
+                    }
+                }
+                xmlhttp.open("POST", urlPath, true);
+                xmlhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                xmlhttp.send();
+            }
+        }
+
+        function formSerialize(clickObj) {
+            var res = [], //存放结果的数组
+                current = null, //循环内的表单控件
+                i,  //表单的索引
+                len; //表单的长度
+
+            for (i = 0, len = clickObj.elements.length; i < len; i++) {
+                current = clickObj.elements[i];
+                if (current.disabled) {
+                    continue;
+                }
+                switch (current.type) {
+                    case "file":
+                        case "submit":
+                            case "button":
+                                case "image":
+                                    case "reset":
+                                        case undefined: break;
+                                        case "select-one":
+                                            case "select-multiple":
+                                                case "radio":
+                                                    case "checkbox":
+                                                        default:
+                                                            if (current.name && current.name.length) {
+                                                                res.push(encodeURIComponent(current.name) + "=" + encodeURIComponent(current.value));
+
+                                                            }
+                }
+                res.join("&");
+            }
+            return res.join("&");
+        }
+
+        //显示学生成绩界面
+        function showStudentScores(urlPath) {
+            document.getElementById("searchContent").innerHTML = "";
+            showAtRight(urlPath);
+        }
         //显示选课/退选实验界面，只显示可选实验
         function showAllowSelectedExperiments(urlPath) {
             document.getElementById("searchContent").innerHTML = "";
@@ -89,11 +370,21 @@
                         //接收到服务器端返回的JSON对象
                         var obj = JSON.parse(xmlhttp.responseText);
                         if (obj.state == 1) {
+                            alert(obj.message);
                             clickObj.className = "btn btn-outline-danger";
                             clickObj.innerHTML = "退选";
+                            var tab = document.getElementById("allowSelectedExperiments");
+                            for (var i = 1; i < tab.rows.length; i++) {
+                                if (tab.rows[i].cells[0].innerHTML == clickObj.id) {
+                                    //已选数加一
+                                    tab.rows[i].cells[6].innerHTML = 1 + parseInt(tab.rows[i].cells[6].innerHTML);
+                                    break;
+                                }
+                            }
                             clickObj.onclick = function () {
                                 dropExperiment(studentId, clickObj);
                             }
+
                             //attachEvent会立即触发，而上面的不会
                             // clickObj.attachEvent('onclick', dropExperiment(studentId, clickObj));
                         } else if ((obj.state == 0) || (obj.state == -4) || (obj.state == -3)) {
@@ -167,6 +458,16 @@
                         //接收到服务器端返回的JSON对象
                         var obj = JSON.parse(xmlhttp.responseText);
                         if (obj.state == 2) {
+                            //退选成功
+                            alert(obj.message);
+                            var tab = document.getElementById("allowSelectedExperiments");
+                            for (var i = 1; i < tab.rows.length; i++) {
+                                if (tab.rows[i].cells[0].innerHTML == clickObj.id) {
+                                    //已选数加一
+                                    tab.rows[i].cells[6].innerHTML = parseInt(tab.rows[i].cells[6].innerHTML) - 1;
+                                    break;
+                                }
+                            }
                             clickObj.className = "btn btn-outline-dark";
                             clickObj.innerHTML = "选择";
                             clickObj.onclick = function () {

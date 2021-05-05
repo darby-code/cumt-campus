@@ -1,7 +1,7 @@
 package edu.cumt.phyExperiment.dto;
 
 import edu.cumt.phyExperiment.entity.ExperimentSelected;
-import edu.cumt.phyExperiment.enums.StudentSelectedExperimentStateEnum;
+import edu.cumt.phyExperiment.enums.ExperimentStateEnum;
 
 public class SelectedExecution {
     /**
@@ -26,7 +26,7 @@ public class SelectedExecution {
      * @param experimentId
      * @param stateEnum
      */
-    public SelectedExecution(Long experimentId, StudentSelectedExperimentStateEnum stateEnum) {
+    public SelectedExecution(Long experimentId, ExperimentStateEnum stateEnum) {
         this.experimentId = experimentId;
         this.state = stateEnum.getState();
         this.stateInfo = stateEnum.getStateInfo();
@@ -38,7 +38,7 @@ public class SelectedExecution {
      * @param stateEnum
      * @param experimentSelected
      */
-    public SelectedExecution(Long experimentId, StudentSelectedExperimentStateEnum stateEnum, ExperimentSelected experimentSelected) {
+    public SelectedExecution(Long experimentId, ExperimentStateEnum stateEnum, ExperimentSelected experimentSelected) {
         this(experimentId, stateEnum);
         this.experimentSelected = experimentSelected;
     }

@@ -5,6 +5,8 @@ import edu.cumt.phyExperiment.entity.ExperimentTemp;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -14,35 +16,56 @@ public class ExperimentTempDaoTest extends BaseTest {
     ExperimentTempDao experimentTempDao;
 
     @Test
-    public void newExperimentSubmitByTeacher() {
-        ExperimentTemp experimentTemp = new ExperimentTemp("测试名字", new Date(), "测试星期", "测试地点", 1002502L, 7);
-        int result = experimentTempDao.newExperimentSubmitByTeacher(experimentTemp);
+    public void submitNewExperiment() {
+        ExperimentTemp temp = new ExperimentTemp(1002501L, "测试实验名称3", new Date(), "测试时间3",
+                "测试实验地点3", 1002501L, 10);
+        int result = experimentTempDao.submitNewExperiment(temp);
         System.out.println(result);
     }
 
     @Test
-    public void queryAllNewExperiments() {
-        List<ExperimentTemp> list = experimentTempDao.queryAllNewExperiments();
-        System.out.println(list);
+    public void queryAllAuditExperiments() {
+        List<ExperimentTemp> experimentTemps = experimentTempDao.queryAllAuditExperiments();
+        System.out.println(experimentTemps);
     }
 
     @Test
-    public void queryAllNewExperimentsCount() {
-        int count = experimentTempDao.queryAllNewExperimentsCount();
-        System.out.println(count);
+    public void queryAllNotPassExperiments() {
+        List<ExperimentTemp> experimentTemps = experimentTempDao.queryAllNotPassExperiments();
+        System.out.println(experimentTemps);
     }
 
     @Test
-    public void updateSubmitExperimentInfo() {
-        ExperimentTemp experimentTemp = new ExperimentTemp("测试名字1", new Date(), "测试星期1", "测试地点1", 1002502L, 9);
-        experimentTemp.setTempId(2L);
-        int result = experimentTempDao.updateSubmitExperimentInfo(experimentTemp);
-        System.out.println(result);
+    public void queryAllPassExperiments() {
+        List<ExperimentTemp> experimentTemps = experimentTempDao.queryAllPassExperiments();
+        System.out.println(experimentTemps);
     }
 
     @Test
-    public void deleteTempTableExperimentByAdmin() {
-        int result = experimentTempDao.deleteTempTableExperimentByAdmin(2L);
-        System.out.println(result);
+    public void queryAuditExperimentsCount() {
+        int results = experimentTempDao.queryAuditExperimentsCount();
+        System.out.println(results);
     }
+
+    @Test
+    public void queryNotPassExperimentsCount() {
+        int results = experimentTempDao.queryNotPassExperimentsCount();
+        System.out.println(results);
+    }
+
+    @Test
+    public void queryPassExperimentsCount() {
+        int results = experimentTempDao.queryPassExperimentsCount();
+        System.out.println(results);
+    }
+
+    @Test
+    public void queryTeacherSubmitExperiments() {
+        List<ExperimentTemp> experimentTemps = experimentTempDao.queryTeacherSubmitExperiments(1002501L);
+        System.out.println(experimentTemps);
+        experimentTemps = experimentTempDao.queryTeacherSubmitExperiments(1002502);
+        System.out.println(experimentTemps);
+    }
+
+
 }

@@ -31,6 +31,33 @@
         FROM ((experiment_selected es INNER JOIN (experiment e INNER JOIN teacher t ON e.teacher_id = t.teacher_id) 
         ON es.experiment_id = e.experiment_id)) INNER JOIN (student s INNER JOIN college c ON s.college_id = c.college_id) ON es.student_id = s.student_id
     </select>
+    <select id="queryOneSelectedExperiments" resultType="edu.cumt.phyExperiment.entity.ExperimentSelected">
+        SELECT es.serial_id,
+        e.experiment_id 'experiment.experiment_id',
+        e.experiment_name 'experiment.experiment_name',
+        e.week_day 'experiment.week_day',
+        e.experiment_time 'experiment.experiment_time',
+        e.experiment_place 'experiment.experiment_place',
+        t.teacher_id 'experiment.teacher_id',
+        t.teacher_name 'experiment.teacher_name',
+        t.phone_number 'experiment.phone_number',
+        e.capacity 'experiment.capacity',
+        e.selected_number 'experiment.selected_number',
+        e.allowSelected 'experiment.allowSelected',
+        e.finished 'experiment.finished',
+        s.student_id 'student.student_id',
+        s.student_name 'student.student_name',
+        c.college_id 'student.college.college_id',
+        c.college_name 'student.college.college_name',
+        c.description 'student.college.description',
+        s.class_info 'student.class_info',
+        s.phone_number 'student.phone_number',
+        es.score,
+        es.allowModified
+        FROM experiment_selected es INNER JOIN ((experiment e INNER JOIN teacher t ON e.teacher_id = t.teacher_id)
+        INNER JOIN (student s INNER JOIN college c ON s.college_id = c.college_id)) ON (es.experiment_id = e.experiment_id AND es.student_id = s.student_id)
+        WHERE es.experiment_id = #{experimentId}
+    </select>
     <select id="queryOneSelectedExperiment" resultType="edu.cumt.phyExperiment.entity.ExperimentSelected">
         SELECT es.serial_id,
         e.experiment_id 'experiment.experiment_id',
@@ -98,7 +125,7 @@
         SELECT
         e.experiment_id 'experiment.experiment_id',
         e.experiment_name 'experiment.experiment_name',
-        t.teacher_name 'experiment.teacher.teacher_name',
+        t.teacher_name 'experiment.teacher_name',
         s.student_id 'student.student_id',
         s.student_name 'student.student_name',
         es.score

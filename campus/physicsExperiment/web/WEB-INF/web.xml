@@ -6,7 +6,9 @@
     <!--配置Spring IOC配置文件路径-->
     <context-param>
         <param-name>contextConfigLocation</param-name>
-        <param-value>/WEB-INF/applicationContext.xml</param-value>
+        <param-value>/WEB-INF/applicationContext.xml,
+            classpath*:/config/applicationContext-quartz.xml
+        </param-value>
     </context-param>
     <!--配置ContextLoaderListener初始化Spring IOC容器-->
     <listener>

@@ -144,6 +144,12 @@ public interface UserDao {
     int queryAccountCount(String account);
 
     /**
+     * 获取所有管理员信息
+     * @return
+     */
+    List<Admin> queryAllAdmins();
+
+    /**
      * 查找账号对应管理员
      * @param account
      * @return

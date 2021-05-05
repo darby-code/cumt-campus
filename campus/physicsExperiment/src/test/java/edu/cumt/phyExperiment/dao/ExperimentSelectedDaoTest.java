@@ -23,6 +23,12 @@ public class ExperimentSelectedDaoTest extends BaseTest {
     }
 
     @Test
+    public void queryOneSelectedExperiments() {
+        List<ExperimentSelected> list = experimentSelectedDao.queryOneSelectedExperiments(1013L);
+        System.out.println(list);
+    }
+
+    @Test
     public void queryOneSelectedExperiment() {
         ExperimentSelected selected = experimentSelectedDao.queryOneSelectedExperiment(1009, 1001011013);
         System.out.println(selected);

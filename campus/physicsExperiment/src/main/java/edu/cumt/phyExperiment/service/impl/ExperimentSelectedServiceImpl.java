@@ -1,6 +1,7 @@
 package edu.cumt.phyExperiment.service.impl;
 
 import edu.cumt.phyExperiment.dao.ExperimentDao;
+import edu.cumt.phyExperiment.dao.ExperimentLimitDao;
 import edu.cumt.phyExperiment.dao.ExperimentSelectedDao;
 import edu.cumt.phyExperiment.dao.UserDao;
 import edu.cumt.phyExperiment.dto.DropExperimentExecution;
@@ -8,15 +9,15 @@ import edu.cumt.phyExperiment.dto.SelectedExecution;
 import edu.cumt.phyExperiment.entity.Experiment;
 import edu.cumt.phyExperiment.entity.ExperimentSelected;
 import edu.cumt.phyExperiment.entity.Student;
-import edu.cumt.phyExperiment.enums.StudentSelectedExperimentStateEnum;
+import edu.cumt.phyExperiment.enums.ExperimentStateEnum;
 import edu.cumt.phyExperiment.exception.*;
 import edu.cumt.phyExperiment.service.ExperimentSelectedService;
 import edu.cumt.phyExperiment.util.ClickNumberControl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
@@ -28,6 +29,10 @@ public class ExperimentSelectedServiceImpl implements ExperimentSelectedService 
     ExperimentSelectedDao experimentSelectedDao;
     @Resource(name = "experimentDao")
     ExperimentDao experimentDao;
+    @Autowired
+    ExperimentLimitDao experimentLimitDao;
+    @Autowired
+    UserDao userDao;
 
     public static final int TIME_WAITING_FOR_SELECT_EXPERIMENT = 5;
 
@@ -37,8 +42,26 @@ public class ExperimentSelectedServiceImpl implements ExperimentSelectedService 
     }
 
     @Override
+    public List<ExperimentSelected> queryOneSelectedExperiments(long experimentId) {
+        List<ExperimentSelected> selectedList = null;
+        try {
+            selectedList = experimentSelectedDao.queryOneSelectedExperiments(experimentId);
+        } catch (Exception ex) {
+            throw new RuntimeException("查询选课记录时发生一个错误");
+        }
+        return selectedList;
+    }
+
+    @Override
     public List<ExperimentSelected> queryExperimentsScore(long studentId) {
-        return experimentSelectedDao.queryScore(studentId);
+        List<ExperimentSelected> selectedList = null;
+        try {
+            selectedList = experimentSelectedDao.queryScore(studentId);
+        } catch (Exception ex) {
+            throw new RuntimeException("成绩查询时遇到一个未知错误");
+        }
+        //成功查询
+        return selectedList;
     }
 
     @Override
@@ -70,7 +93,15 @@ public class ExperimentSelectedServiceImpl implements ExperimentSelectedService 
                 if(experiment.getCapacity().intValue() == experiment.getSelectedNumber().intValue()) {
                     throw new NoMarginException("实验已选人数达到上限");
                 }
-
+                List<Long> colleges = experimentLimitDao.queryExperimentLimitCollegeIdById(experimentId);
+                Student student = userDao.queryStudentById(studentId);
+                if (colleges != null) {
+                    for (Long collegeId : colleges) {
+                        if (collegeId == student.getCollege().getCollegeId()) {
+                            throw new CollegeLimitException("实验不对你所在学院开放");
+                        }
+                    }
+                }
                 //判断实验时间是否冲突
                 String dateStr = experiment.getExperimentTime().toString();
                 for (Experiment e : selectedExperiments) {
@@ -87,12 +118,12 @@ public class ExperimentSelectedServiceImpl implements ExperimentSelectedService 
                 ExperimentSelected selected = experimentSelectedDao.queryOneSelectedExperiment(experimentId, studentId);
                 //实验选课成功,释放选课许可
                 experimentSelectedPermit.release();
-                return new SelectedExecution(experimentId, StudentSelectedExperimentStateEnum.SUCCESS
+                return new SelectedExecution(experimentId, ExperimentStateEnum.SUCCESS
                         , selected);
             }
         } catch (NotExistsException | SelectedLimitException | RepeatSelectedException
                 | NotAllowSelectedException | NoMarginException | ConflictException
-                | SelectedException e1) {
+                | SelectedException | CollegeLimitException e1) {
             //选实验失败，也必须释放选课许可
             experimentSelectedPermit.release();
             throw e1;
@@ -102,7 +133,7 @@ public class ExperimentSelectedServiceImpl implements ExperimentSelectedService 
             throw new RuntimeException("选课时出现了一个未知的错误");
         }
         //到这里，说明该学生没有获取到选课许可，返回一个TOO_MANY_HITS
-        return new SelectedExecution(experimentId, StudentSelectedExperimentStateEnum.TOO_MANY_HITS);
+        return new SelectedExecution(experimentId, ExperimentStateEnum.TOO_MANY_HITS);
     }
 
     @Transactional
@@ -135,7 +166,7 @@ public class ExperimentSelectedServiceImpl implements ExperimentSelectedService 
             throw new RuntimeException("服务器内部发生一个未知异常");
         }
         //到这里，退选实验成功
-        return new DropExperimentExecution(experimentId, StudentSelectedExperimentStateEnum.DROP_SUCCESS);
+        return new DropExperimentExecution(experimentId, ExperimentStateEnum.DROP_SUCCESS);
     }
 
     @Override
@@ -144,8 +175,38 @@ public class ExperimentSelectedServiceImpl implements ExperimentSelectedService 
     }
 
     @Override
+    public ExperimentSelected queryOneSelectedExperiment(long experimentId, long studentId) {
+        ExperimentSelected selected = null;
+        try {
+            selected = experimentSelectedDao.queryOneSelectedExperiment(experimentId, studentId);
+        } catch (Exception ex) {
+            throw new RuntimeException("查询学生一条已选实验信息时出现错误");
+        }
+        return selected;
+    }
+
+    @Transactional
+    @Override
     public int inputExperimentScore(long experimentId, long studentId, int score) {
         //录入成绩后教师就不可再更改学生成绩
-        return experimentSelectedDao.updateScore(experimentId, studentId, score, false);
+        try {
+            experimentSelectedDao.updateScore(experimentId, studentId, score, false);
+            //检查一个实验是否所有成绩都录完，如果是则将实验置为结束状态
+            List<ExperimentSelected> selectedList = experimentSelectedDao.queryOneSelectedExperiments(experimentId);
+            boolean isFinished = true; // 假设可以结束
+            for (ExperimentSelected es : selectedList) {
+                if (es.getAllowModified()) {
+                    isFinished = false; //假设不成立，成绩未录完，实验不能为结束状态
+                    break;
+                }
+            }
+            if (isFinished) {
+                experimentDao.setExperimentFinished(experimentId); //假设成立
+            }
+            //到这里，说明都成功了，如果实验结束返回2，实验没有结束，但成绩更新成功返回1
+            return isFinished ? 2 : 1;
+        } catch (Exception ex) {
+            throw new RuntimeException("成绩更新失败，请重新尝试");
+        }
     }
 }

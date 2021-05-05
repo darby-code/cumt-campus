@@ -42,6 +42,7 @@ public class Result<T> {
 
     /**
      * 失败时的构造器
+     * 如果成功时返回的数据是字符串，则也可用
      * @param success
      * @param message
      */

@@ -19,13 +19,13 @@ public class RoleTransfer {
      */
     private RoleStateEnum roleStateEnum;
 
-    private int studentOrTeacherId;
+    private Long studentOrTeacherId;
 
     private String adminAccount;
 
     public RoleTransfer() {}
 
-    public RoleTransfer(int studentOrTeacherId, String name, String password, RoleStateEnum roleStateEnum) {
+    public RoleTransfer(long studentOrTeacherId, String name, String password, RoleStateEnum roleStateEnum) {
         this.studentOrTeacherId = studentOrTeacherId;
         this.name = name;
         this.password = password;
@@ -59,11 +59,11 @@ public class RoleTransfer {
         this.password = password;
     }
 
-    public int getStudentOrTeacherId() {
+    public Long getStudentOrTeacherId() {
         return studentOrTeacherId;
     }
 
-    public void setStudentOrTeacherId(int studentOrTeacherId) {
+    public void setStudentOrTeacherId(long studentOrTeacherId) {
         this.studentOrTeacherId = studentOrTeacherId;
     }
 

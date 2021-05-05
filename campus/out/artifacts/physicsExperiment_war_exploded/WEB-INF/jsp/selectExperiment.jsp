@@ -19,7 +19,7 @@
         </div>
         <div class="row gy-5">
             <!--数据显示区域-->
-            <table class="table table-hover">
+            <table id="allowSelectedExperiments" class="table table-hover">
                 <thead>
                 <tr>
                     <th scope="col">实验编号</th>
@@ -27,7 +27,9 @@
                     <th scope="col">实验时间</th>
                     <th scope="col">实验老师</th>
                     <th scope="col">实验地点</th>
-                    <th scope="col">可选/可选</th>
+                    <th scope="col">可选</th>
+                    <th scope="col">已选</th>
+                    <th scope="col">实验截止选课时间</th>
                     <th scope="col">操作</th>
                 </tr>
                 </thead>
@@ -39,7 +41,9 @@
                         <td>${experiment.experimentTime}</td>
                         <td>${experiment.teacherName}</td>
                         <td>${experiment.experimentPlace}</td>
-                        <td>${experiment.selectedNumber}/${experiment.capacity}</td>
+                        <td>${experiment.capacity}</td>
+                        <td>${experiment.selectedNumber}</td>
+                        <td>${experimentDeadLine.get(experiment.experimentId)}</td>
                         <td>
                             <c:if test="${studentSelectedExperiments.get(experiment.experimentId) == null}">
                                 <c:if test="${experiment.selectedNumber < experiment.capacity}">

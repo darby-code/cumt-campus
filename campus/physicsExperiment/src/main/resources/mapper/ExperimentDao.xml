@@ -74,7 +74,7 @@
          WHERE
          experiment_name = #{experimentName}
      </select>
-     <select id="queryMaxExperimentId" resultType="int">
+     <select id="queryMaxExperimentId" resultType="long">
          SELECT
          experiment_id
          FROM experiment ORDER BY experiment_id DESC LIMIT 1
@@ -130,4 +130,10 @@
         finished = 1
         WHERE experiment_id = #{experimentId}
     </update>
+    <select id="queryExperimentName" resultType="String">
+        SELECT experiment_name FROM experiment_list
+    </select>
+    <select id="queryExperimentPlace" resultType="String">
+        SELECT experiment_place FROM class_place
+    </select>
 </mapper>

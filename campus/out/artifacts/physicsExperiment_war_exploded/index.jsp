@@ -43,7 +43,7 @@
                 <img src="resources/images/experiment-dark.png" style="width: 900px;height: 555px;" alt="...">
                 <div class="carousel-caption d-none d-md-block">
                     <h5>物理实验注意事项</h5>
-                    <p>不可以无故缺席所选物理实验，否则视为缺席。另外，本学期要选够10个实验</p>
+                    <p>不可以无故缺席所选物理实验，否则视为缺席。另外，本学期要选够5个实验</p>
                 </div>
             </div>
         </div>

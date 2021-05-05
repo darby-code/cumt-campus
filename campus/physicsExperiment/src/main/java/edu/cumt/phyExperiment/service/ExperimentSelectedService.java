@@ -29,6 +29,13 @@ public interface ExperimentSelectedService {
     List<Experiment> querySelectedExperiments(long studentId);
 
     /**
+     * 查询一个实验的选课情况
+     * @param experimentId
+     * @return
+     */
+    List<ExperimentSelected> queryOneSelectedExperiments(long experimentId);
+
+    /**
      * 学生查询实验成绩
      * @param studentId
      * @return
@@ -57,6 +64,14 @@ public interface ExperimentSelectedService {
      * @return
      */
     List<Student> queryExperimentStudents(long experimentId);
+
+    /**
+     * 查询一条已选实验信息
+     * @param experimentId
+     * @param studentId
+     * @return
+     */
+    ExperimentSelected queryOneSelectedExperiment(long experimentId, long studentId);
 
     /**
      * 教师录入成绩

@@ -4,7 +4,12 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="edu.cumt.phyExperiment.dao.ExperimentTempDao">
-    <insert id="newExperimentSubmitByTeacher" parameterType="edu.cumt.phyExperiment.entity.ExperimentTemp">
+    <select id="queryOneTempExperiment" resultType="edu.cumt.phyExperiment.entity.ExperimentTemp">
+        SELECT temp_id, experiment_name, experiment_time, week_day, experiment_place
+        , teacher_id, capacity, submit_teacher_id, state, audit_admin_account
+        FROM experiment_temp WHERE temp_id = #{tempId}
+    </select>
+    <insert id="submitNewExperiment" parameterType="edu.cumt.phyExperiment.entity.ExperimentTemp">
         INSERT experiment_temp
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="experimentName != null and experimentName != ''">
@@ -25,6 +30,9 @@
             <if test="capacity != 0">
                 capacity,
             </if>
+            <if test="submitTeacherId != null">
+                submit_teacher_id,
+            </if>
         </trim>
         <trim prefix="VALUES(" suffix=")" suffixOverrides=",">
             <if test="experimentName != null and experimentName != ''">
@@ -43,17 +51,49 @@
                 #{teacherId},
             </if>
             <if test="capacity != 0">
-                #{capacity}
+                #{capacity},
+            </if>
+            <if test="submitTeacherId != null">
+                #{submitTeacherId}
             </if>
         </trim>
     </insert>
-    <select id="queryAllNewExperiments" resultType="edu.cumt.phyExperiment.entity.ExperimentTemp">
+    <select id="queryAllTempExperiments" resultType="edu.cumt.phyExperiment.entity.ExperimentTemp">
         SELECT temp_id, experiment_name, experiment_time, week_day, experiment_place
-        , teacher_id, capacity
+        , teacher_id, capacity, submit_teacher_id, state, audit_admin_account
         FROM experiment_temp
     </select>
-    <select id="queryAllNewExperimentsCount" resultType="int">
-        SELECT COUNT(*) FROM experiment_temp
+    <select id="queryAllAuditExperiments" resultType="edu.cumt.phyExperiment.entity.ExperimentTemp">
+        SELECT temp_id, experiment_name, experiment_time, week_day, experiment_place
+        , teacher_id, capacity, submit_teacher_id, state, audit_admin_account
+        FROM experiment_temp WHERE state = 0
+    </select>
+    <select id="queryAllNotPassExperiments" resultType="edu.cumt.phyExperiment.entity.ExperimentTemp">
+        SELECT temp_id, experiment_name, experiment_time, week_day, experiment_place
+        , teacher_id, capacity, submit_teacher_id, state, audit_admin_account
+        FROM experiment_temp WHERE state = 1
+    </select>
+    <select id="queryAllPassExperiments" resultType="edu.cumt.phyExperiment.entity.ExperimentTemp">
+        SELECT temp_id, experiment_name, experiment_time, week_day, experiment_place
+        , teacher_id, capacity, submit_teacher_id, state, audit_admin_account
+        FROM experiment_temp WHERE state = 2
+    </select>
+    <select id="queryAuditExperimentsCount" resultType="int">
+        SELECT COUNT(*) FROM experiment_temp WHERE state = 0
+    </select>
+
+    <select id="queryNotPassExperimentsCount" resultType="int">
+        SELECT COUNT(*) FROM experiment_temp WHERE state = 1
+    </select>
+
+    <select id="queryPassExperimentsCount" resultType="int">
+        SELECT COUNT(*) FROM experiment_temp WHERE state = 2
+    </select>
+
+    <select id="queryTeacherSubmitExperiments" resultType="edu.cumt.phyExperiment.entity.ExperimentTemp">
+        SELECT temp_id, experiment_name, experiment_time, week_day, experiment_place
+        , teacher_id, capacity, submit_teacher_id, state, audit_admin_account
+        FROM experiment_temp WHERE submit_teacher_id = #{submitTeacherId}
     </select>
 
     <update id="updateSubmitExperimentInfo" parameterType="edu.cumt.phyExperiment.entity.ExperimentTemp">
@@ -79,7 +119,10 @@
         </if>
         WHERE temp_id = #{tempId}
     </update>
-    <delete id="deleteTempTableExperimentByAdmin">
-        DELETE FROM experiment_temp WHERE temp_id = #{tempId}
-    </delete>
+    <update id="updateExperimentState">
+        UPDATE experiment_temp
+        SET state = #{state},
+        audit_admin_account = #{auditAdminAccount}
+        WHERE temp_id = #{tempId}
+    </update>
 </mapper>

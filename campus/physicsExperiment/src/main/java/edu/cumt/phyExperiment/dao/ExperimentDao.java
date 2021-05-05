@@ -71,7 +71,7 @@ public interface ExperimentDao {
      * 查询最大的实验编号
      * @return
      */
-    int queryMaxExperimentId();
+    long queryMaxExperimentId();
 
     /**
      * 修改实验的信息
@@ -122,4 +122,16 @@ public interface ExperimentDao {
      * @return
      */
     int setExperimentFinished(long experimentId);
+
+    /**
+     * 查询所有的实验名称
+     * @return
+     */
+    List<String> queryExperimentName();
+
+    /**
+     * 查询所有的上课教室
+     * @return
+     */
+    List<String> queryExperimentPlace();
 }

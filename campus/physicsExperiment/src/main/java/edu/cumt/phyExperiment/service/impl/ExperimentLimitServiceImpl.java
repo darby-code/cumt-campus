@@ -4,6 +4,7 @@ import edu.cumt.phyExperiment.dao.ExperimentLimitDao;
 import edu.cumt.phyExperiment.entity.ExperimentLimit;
 import edu.cumt.phyExperiment.service.ExperimentLimitService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;

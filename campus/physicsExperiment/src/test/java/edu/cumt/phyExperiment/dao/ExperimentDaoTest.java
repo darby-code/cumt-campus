@@ -87,7 +87,7 @@ public class ExperimentDaoTest extends BaseTest {
 
     @Test
     public void queryMaxExperimentId() {
-        int maxExperimentId = experimentDao.queryMaxExperimentId();
+        long maxExperimentId = experimentDao.queryMaxExperimentId();
         System.out.println(maxExperimentId);
     }
 
@@ -128,7 +128,7 @@ public class ExperimentDaoTest extends BaseTest {
 
     @Test
     public void deleteExperimentBy() {
-        int maxExperimentId = experimentDao.queryMaxExperimentId();
+        long maxExperimentId = experimentDao.queryMaxExperimentId();
         int result = experimentDao.deleteExperimentBy(maxExperimentId);
         System.out.println(result + "    " + maxExperimentId);
     }

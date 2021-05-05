@@ -1,6 +1,6 @@
 package edu.cumt.phyExperiment.dto;
 
-import edu.cumt.phyExperiment.enums.StudentSelectedExperimentStateEnum;
+import edu.cumt.phyExperiment.enums.ExperimentStateEnum;
 
 public class DropExperimentExecution {
     /**
@@ -16,7 +16,7 @@ public class DropExperimentExecution {
      */
     private String stateInfo;
 
-    public DropExperimentExecution(Long experimentId, StudentSelectedExperimentStateEnum stateEnum) {
+    public DropExperimentExecution(Long experimentId, ExperimentStateEnum stateEnum) {
         this.experimentId = experimentId;
         this.state = stateEnum.getState();
         this.stateInfo = stateEnum.getStateInfo();

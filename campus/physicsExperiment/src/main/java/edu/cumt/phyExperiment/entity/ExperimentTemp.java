@@ -20,9 +20,25 @@ public class ExperimentTemp {
     private Long teacherId;
     private Integer capacity;
 
+    /**
+     * 发布实验的教师工号
+     */
+    private Long submitTeacherId;
+    /**
+     * 发布实验的状态
+     * 0 为默认值 表示审核中
+     * 1 为审核不通过
+     * 2 为审核通过
+     */
+    private Integer state;
+    /**
+     * 审核实验的管理员账号
+     */
+    private String auditAdminAccount;
+
     public ExperimentTemp() {}
 
-    public ExperimentTemp(String experimentName, Date experimentTime, String weekDay
+    public ExperimentTemp(Long submitTeacherId, String experimentName, Date experimentTime, String weekDay
             , String experimentPlace, Long teacherId, Integer capacity) {
         this.experimentName = experimentName;
         this.experimentTime = experimentTime;
@@ -30,6 +46,7 @@ public class ExperimentTemp {
         this.experimentPlace = experimentPlace;
         this.teacherId = teacherId;
         this.capacity = capacity;
+        this.submitTeacherId = submitTeacherId;
     }
 
     public Long getTempId() {
@@ -88,6 +105,30 @@ public class ExperimentTemp {
         this.capacity = capacity;
     }
 
+    public Long getSubmitTeacherId() {
+        return submitTeacherId;
+    }
+
+    public void setSubmitTeacherId(Long submitTeacherId) {
+        this.submitTeacherId = submitTeacherId;
+    }
+
+    public Integer getState() {
+        return state;
+    }
+
+    public void setState(Integer state) {
+        this.state = state;
+    }
+
+    public String getAuditAdminAccount() {
+        return auditAdminAccount;
+    }
+
+    public void setAuditAdminAccount(String auditAdminAccount) {
+        this.auditAdminAccount = auditAdminAccount;
+    }
+
     @Override
     public String toString() {
         return "ExperimentTemp{" +
@@ -98,6 +139,9 @@ public class ExperimentTemp {
                 ", experimentPlace='" + experimentPlace + '\'' +
                 ", teacherId=" + teacherId +
                 ", capacity=" + capacity +
+                ", submitTeacherId=" + submitTeacherId +
+                ", state=" + state +
+                ", auditAdminAccount='" + auditAdminAccount + '\'' +
                 '}';
     }
 }

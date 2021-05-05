@@ -4,6 +4,7 @@ import edu.cumt.phyExperiment.dao.ExperimentDao;
 import edu.cumt.phyExperiment.entity.Experiment;
 import edu.cumt.phyExperiment.service.ExperimentService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.Date;
@@ -70,13 +71,46 @@ public class ExperimentServiceImpl implements ExperimentService {
     }
 
 
+    @Transactional
     @Override
     public int setExperimentNotAllowSelected(long experimentId) {
-        return experimentDao.setExperimentNotAllowSelected(experimentId);
+        int result = 0;
+        try {
+            result = experimentDao.setExperimentNotAllowSelected(experimentId);
+            if (result != 1) {
+                //实验的截止选课设置操作重复操作
+                throw new RuntimeException();
+            }
+            return result;
+        } catch (Exception ex) {
+            throw new RuntimeException("实验的截止选课设置操作失败");
+        }
     }
 
     @Override
     public int setExperimentFinished(long experimentId) {
         return experimentDao.setExperimentFinished(experimentId);
+    }
+
+    @Override
+    public List<String> queryExperimentName() {
+        List<String> experimentNames = null;
+        try {
+            experimentNames = experimentDao.queryExperimentName();
+            return experimentNames;
+        } catch (Exception ex) {
+            throw new RuntimeException("查询实验名称时遇到异常");
+        }
+    }
+
+    @Override
+    public List<String> queryExperimentPlace() {
+        List<String> experimentPlaces = null;
+        try {
+            experimentPlaces = experimentDao.queryExperimentPlace();
+            return experimentPlaces;
+        } catch (Exception ex) {
+            throw new RuntimeException("查询实验教室时遇到异常");
+        }
     }
 }

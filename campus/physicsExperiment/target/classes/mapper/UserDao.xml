@@ -159,6 +159,11 @@
     <select id="queryAccountCount" resultType="int">
         SELECT COUNT(*) FROM admin WHERE account = #{account};
     </select>
+    <select id="queryAllAdmins" resultType="edu.cumt.phyExperiment.entity.Admin">
+        SELECT
+        <include refid="admin_base_column" />
+        FROM admin
+    </select>
     <select id="queryAdminByAccount" resultType="edu.cumt.phyExperiment.entity.Admin">
         SELECT
         <include refid="admin_base_column" />

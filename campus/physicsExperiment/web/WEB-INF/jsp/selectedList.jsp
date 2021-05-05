@@ -11,7 +11,6 @@
 <html>
 <body>
     <%@include file="base/baseHeader.jsp"%>
-    <% Student student = (Student) session.getAttribute("role"); %>
     <div class="row" style="height: 25px;"></div>
     <div class="row justify-content-center">
         <div class="col-4">
@@ -20,7 +19,7 @@
     </div>
     <div class="row gy-5">
         <!--数据显示区域-->
-        <table class="table table-hover">
+        <table id="allowSelectedExperiments" class="table table-hover">
             <thead>
             <tr>
                 <th scope="col">实验编号</th>
@@ -28,7 +27,8 @@
                 <th scope="col">实验时间</th>
                 <th scope="col">实验地点</th>
                 <th scope="col">实验老师</th>
-                <th scope="col">已选/可选</th>
+                <th scope="col">可选</th>
+                <th scope="col">已选</th>
                 <th scope="col">操作</th>
             </tr>
             </thead>
@@ -40,10 +40,11 @@
                     <td>${experiment.experimentTime}</td>
                     <td>${experiment.experimentPlace}</td>
                     <td>${experiment.teacherName}</td>
-                    <td>${experiment.selectedNumber}/${experiment.capacity}</td>
+                    <td>${experiment.capacity}</td>
+                    <td>${experiment.selectedNumber}</td>
                     <td>
                         <c:if test="${experiment.allowSelected == true}">
-                            <button class="btn btn-outline-danger" id="${experiment.experimentId}" onclick="dropExperiment(<%=student.getStudentId()%>, this)">退选</button>
+                            <button class="btn btn-outline-danger" id="${experiment.experimentId}" onclick="dropExperiment(${studentId}, this)">退选</button>
                         </c:if>
                         <c:if test="${experiment.allowSelected == false}">
                             <button class="btn btn-outline-danger" id="${experiment.experimentId}" disabled>退选</button>

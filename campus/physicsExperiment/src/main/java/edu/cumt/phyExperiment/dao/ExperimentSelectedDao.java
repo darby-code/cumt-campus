@@ -16,6 +16,13 @@ public interface ExperimentSelectedDao {
     List<ExperimentSelected> queryAllSelectedExperiments();
 
     /**
+     * 查询一个实验的选课记录
+     * @param experimentId
+     * @return
+     */
+    List<ExperimentSelected> queryOneSelectedExperiments(long experimentId);
+
+    /**
      * 查询一条实验选课记录
      * @param experimentId
      * @param studentId

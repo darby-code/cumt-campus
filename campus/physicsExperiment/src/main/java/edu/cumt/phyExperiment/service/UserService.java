@@ -4,6 +4,8 @@ import edu.cumt.phyExperiment.entity.Admin;
 import edu.cumt.phyExperiment.entity.Student;
 import edu.cumt.phyExperiment.entity.Teacher;
 
+import java.util.List;
+
 /**
  * UserService功能：
  * AdminService功能：
@@ -14,6 +16,7 @@ import edu.cumt.phyExperiment.entity.Teacher;
  * 教师简单注册  teacherRegistry
  * 学生、教师登录   studentLogin   teacherLogin
  * 学生、教师修改密码  modifyStudentPassword  modifyTeacherPassword
+ * 学生、教师、管理员修改信息 updateStudentInfo updateTeacherInfo updateAdminInfo
  *
  */
 public interface UserService {
@@ -81,5 +84,66 @@ public interface UserService {
      */
     int modifyStudentPassword(long studentId, String oldPassword, String newPassword);
 
+    /**
+     * 管理员重置学生密码
+     * @param studentId
+     * @param newPassword
+     * @return
+     */
+    int resetStudentPassword(long studentId, String newPassword);
+
+    /**
+     * 重置所有学生密码为学号
+     * @param students
+     * @return
+     */
+    int resetAllStudentsPassword(List<Student> students);
+
     int modifyTeacherPassword(long teacherId, String oldPassword, String newPassword);
+
+    /**
+     * 管理员重置老师密码
+     * @param teacherId
+     * @param newPassword
+     * @return
+     */
+    int resetTeacherPassword(long teacherId, String newPassword);
+
+    /**
+     * 重置所有老师密码为学号
+     * @param teachers
+     * @return
+     */
+    int resetAllTeachersPassword(List<Teacher> teachers);
+
+    int updateStudentInfo(Student student);
+
+    int updateTeacherInfo(Teacher teacher);
+
+    int updateAdminInfo(Admin admin);
+
+    List<Student> queryAllStudents();
+    List<Teacher> queryAllTeachers();
+    List<Admin> queryAllAdmins();
+    List<Student> queryCollegerById(long collegeId);
+
+    /**
+     * 查询一个学院的所有老师
+     * @param collegeId
+     * @return
+     */
+    List<Teacher> queryCollegeTeacherById(long collegeId);
+
+    /**
+     * 查询公告内容
+     * @return
+     */
+    String queryAnnouncementContent();
+
+    /**
+     * 修改公告内容
+     * @param newContent
+     * @return
+     */
+    int modifyAnnouncementContent(String newContent);
 }

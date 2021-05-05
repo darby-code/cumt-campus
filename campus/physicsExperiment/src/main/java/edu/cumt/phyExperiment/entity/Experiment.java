@@ -66,6 +66,15 @@ public class Experiment {
 
     public Experiment() {}
 
+    public Experiment(ExperimentTemp experimentTemp) {
+        this.experimentName = experimentTemp.getExperimentName();
+        this.experimentTime = experimentTemp.getExperimentTime();
+        this.weekDay = experimentTemp.getWeekDay();
+        this.experimentPlace = experimentTemp.getExperimentPlace();
+        this.teacherId = experimentTemp.getTeacherId();
+        this.capacity = experimentTemp.getCapacity();
+    }
+
     public Experiment(String experimentName, Date experimentTime, String weekDay
             , String experimentPlace, Long teacherId, String teacherName
             , String phoneNumber, Integer capacity) {
