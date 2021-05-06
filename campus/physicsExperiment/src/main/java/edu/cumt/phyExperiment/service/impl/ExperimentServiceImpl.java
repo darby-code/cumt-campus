@@ -1,5 +1,6 @@
 package edu.cumt.phyExperiment.service.impl;
 
+import com.sun.jmx.snmp.tasks.ThreadService;
 import edu.cumt.phyExperiment.dao.ExperimentDao;
 import edu.cumt.phyExperiment.entity.Experiment;
 import edu.cumt.phyExperiment.service.ExperimentService;
@@ -9,6 +10,9 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadPoolExecutor;
 
 @Service("experimentService")
 public class ExperimentServiceImpl implements ExperimentService {
@@ -17,57 +21,102 @@ public class ExperimentServiceImpl implements ExperimentService {
 
     @Override
     public List<Experiment> queryAllExperiments() {
-        return experimentDao.queryAllExperiments();
+        try {
+            return experimentDao.queryAllExperiments();
+        } catch (Exception ex) {
+            throw new RuntimeException("查询所有实验信息时遇到错误");
+        }
     }
 
     @Override
     public Experiment queryExperimentById(long experimentId) {
-        return experimentDao.queryExperimentById(experimentId);
+        try {
+            return experimentDao.queryExperimentById(experimentId);
+        } catch (Exception ex) {
+            throw new RuntimeException("查询一条实验信息时遇到错误");
+        }
     }
 
     @Override
     public List<Experiment> queryExperimentByName(String experimentName) {
-        return experimentDao.queryExperimentByName(experimentName);
+        try {
+            return experimentDao.queryExperimentByName(experimentName);
+        } catch (Exception ex) {
+            throw new RuntimeException("根据实验名称查询实验时遇到错误");
+        }
     }
 
     @Override
     public List<Experiment> queryExperimentByKeyWords(String words) {
-        return experimentDao.queryExperimentsByKeyWords(words);
+        try {
+            return experimentDao.queryExperimentsByKeyWords(words);
+
+        } catch (Exception ex) {
+            throw new RuntimeException("根据关键词查找实验时遇到错误");
+        }
     }
 
     @Override
     public List<Experiment> queryTeacherExperimentsById(long teacherId) {
-        return experimentDao.queryTeacherExperiments(teacherId);
+        try {
+            return experimentDao.queryTeacherExperiments(teacherId);
+        } catch (Exception ex) {
+            throw new RuntimeException("查询一个老师的实验课程信息时遇到错误");
+        }
     }
 
     @Override
     public List<Experiment> queryAllowSelectedExperiments() {
-        return experimentDao.queryAllowSelectedExperiments();
+        try {
+            return experimentDao.queryAllowSelectedExperiments();
+        } catch (Exception ex) {
+            throw new RuntimeException("查询所有可选实验信息时遇到错误");
+        }
     }
 
     @Override
     public List<Experiment> queryNotAllowSelectedExperiments() {
-        return experimentDao.queryNotAllowSelectedExperiments();
+        try {
+            return experimentDao.queryNotAllowSelectedExperiments();
+        } catch (Exception ex) {
+            throw new RuntimeException("查询所有不可选实验信息时遇到错误");
+        }
     }
 
     @Override
     public List<Experiment> queryFinishedExperiments() {
-        return experimentDao.queryFinishedExperiments();
+        try {
+            return experimentDao.queryFinishedExperiments();
+        } catch (Exception ex) {
+            throw new RuntimeException("查询已经出成绩的实验时遇到错误");
+        }
     }
 
     @Override
     public int addNewExperiment(Experiment experiment) {
-        return experimentDao.insertExperiment(experiment);
+        try {
+            return experimentDao.insertExperiment(experiment);
+        } catch (Exception ex) {
+            throw new RuntimeException("新增一个新的实验给学生选课时遇到错误");
+        }
     }
 
     @Override
     public int deleteExperimentById(long experimentId) {
-        return experimentDao.deleteExperimentBy(experimentId);
+        try {
+            return experimentDao.deleteExperimentBy(experimentId);
+        } catch (Exception ex) {
+            throw new RuntimeException("删除一个实验时遇到错误");
+        }
     }
 
     @Override
     public int modifyExperiment(Experiment experiment) {
-        return experimentDao.updateExperimentInfo(experiment);
+        try {
+            return experimentDao.updateExperimentInfo(experiment);
+        } catch (Exception ex) {
+            throw new RuntimeException("修改一个实验信息时遇到错误");
+        }
     }
 
 
@@ -89,7 +138,11 @@ public class ExperimentServiceImpl implements ExperimentService {
 
     @Override
     public int setExperimentFinished(long experimentId) {
-        return experimentDao.setExperimentFinished(experimentId);
+        try {
+            return experimentDao.setExperimentFinished(experimentId);
+        } catch (Exception ex) {
+            throw new RuntimeException("设置实验为结束状态时遇到错误");
+        }
     }
 
     @Override

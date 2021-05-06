@@ -7,6 +7,9 @@ import org.apache.ibatis.annotations.Param;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * 实验
+ */
 public interface ExperimentDao {
     /**
      * 查询所有实验
@@ -15,7 +18,7 @@ public interface ExperimentDao {
     List<Experiment> queryAllExperiments();
 
     /**
-     * 查询还允许选课的实验
+     * 查询允许选课的实验
      * @return
      */
     List<Experiment> queryAllowSelectedExperiments();
@@ -33,7 +36,7 @@ public interface ExperimentDao {
     List<Experiment> queryFinishedExperiments();
 
     /**
-     * 根据教师工号查询教师的实验
+     * 根据教师工号查询教师的实验课程
      * @param teacherId
      * @return
      */

@@ -1,5 +1,8 @@
 package edu.cumt.phyExperiment.enums;
 
+/**
+ * 管理员审核实验的数据字典
+ */
 public enum AuditExperimentStateEnum {
     AUDIT_PASS_SUCCESS(1, "实验审核通过操作成功"), AUDIT_NOT_PASS_SUCCESS(0, "实验审核不通过操作成功"),
     AUDIT_PASS_FAILED(-1, "实验审核通过操作失败"), AUDIT_NOT_PASS_FAILED(-2, "实验审核不通过操作失败"),

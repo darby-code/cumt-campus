@@ -1,5 +1,8 @@
 package edu.cumt.phyExperiment.enums;
 
+/**
+ * 性别数据字典
+ */
 public enum SexEnum {
 
     MAN(false, "男"), WOMAN(true, "女");

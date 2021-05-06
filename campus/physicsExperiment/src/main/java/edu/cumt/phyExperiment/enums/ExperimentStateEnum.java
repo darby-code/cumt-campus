@@ -1,5 +1,9 @@
 package edu.cumt.phyExperiment.enums;
 
+/**
+ * 实验选课、退课、修改成绩等相关实验操作的数据字典
+ *
+ */
 public enum ExperimentStateEnum {
     SET_NOT_ALLOW_SELECTED_SUCCESS(6, "实验截止选课设置成功"),
     SUBMIT_SCORE_SUCCESS(4, "成绩更新成功"), SUBMIT_SCORE_SUCCESS_FINISHED(5, "实验所有成绩更新完毕"),

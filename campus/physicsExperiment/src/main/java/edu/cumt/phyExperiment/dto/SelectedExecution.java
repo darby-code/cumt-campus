@@ -3,6 +3,9 @@ package edu.cumt.phyExperiment.dto;
 import edu.cumt.phyExperiment.entity.ExperimentSelected;
 import edu.cumt.phyExperiment.enums.ExperimentStateEnum;
 
+/**
+ * 用于学生选课操作，将选课结果封装成json对象返回
+ */
 public class SelectedExecution {
     /**
      * 学生所选的实验编号

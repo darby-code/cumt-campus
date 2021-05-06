@@ -49,6 +49,7 @@ public class ExperimentTemp {
         this.submitTeacherId = submitTeacherId;
     }
 
+    /*****************Getter和Setter以及toString方法*************************/
     public Long getTempId() {
         return tempId;
     }

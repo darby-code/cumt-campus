@@ -1,7 +1,7 @@
 package edu.cumt.phyExperiment.exception;
 
 /**
- * 实验课程冲突异常
+ * 学生所选实验课程冲突异常
  */
 public class ConflictException extends RuntimeException {
 

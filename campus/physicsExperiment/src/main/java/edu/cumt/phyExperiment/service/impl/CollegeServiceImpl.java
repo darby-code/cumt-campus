@@ -17,16 +17,28 @@ public class CollegeServiceImpl implements CollegeService {
 
     @Override
     public String queryCollegeNameById(long collegeId) {
-        return collegeDao.queryCollegeNameById(collegeId);
+        try {
+            return collegeDao.queryCollegeNameById(collegeId);
+        } catch (Exception ex) {
+            throw new RuntimeException("查询学院名称时遇到错误");
+        }
     }
 
     @Override
     public List<College> queryAllCollegesInfo() {
-        return collegeDao.queryAllColleges();
+        try {
+            return collegeDao.queryAllColleges();
+        } catch (Exception ex) {
+            throw new RuntimeException("查询所有学院信息时遇到错误");
+        }
     }
 
     @Override
     public String queryCollegeDescriptionById(long collegeId) {
-        return collegeDao.queryCollegeDescriptionById(collegeId);
+        try {
+            return collegeDao.queryCollegeDescriptionById(collegeId);
+        } catch (Exception ex) {
+            throw new RuntimeException("查询学院简介时遇到错误");
+        }
     }
 }

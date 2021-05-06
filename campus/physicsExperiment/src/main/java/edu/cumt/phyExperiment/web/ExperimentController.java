@@ -187,6 +187,7 @@ public class ExperimentController {
         } catch (CollegeLimitException ex) {
             execution = new SelectedExecution(experimentId, ExperimentStateEnum.COLLEGE_LIMIT);
         } catch (Exception ex) {
+            ex.printStackTrace();
             execution = new SelectedExecution(experimentId, ExperimentStateEnum.INNER_ERROR);
         }
         //返回前端的JSON对象

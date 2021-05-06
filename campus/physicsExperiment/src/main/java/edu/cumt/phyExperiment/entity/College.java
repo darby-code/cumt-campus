@@ -33,7 +33,6 @@ public class College {
     }
 
     /*****************Getter和Setter以及toString方法*************************/
-
     public String getCollegeName() {
         return collegeName;
     }

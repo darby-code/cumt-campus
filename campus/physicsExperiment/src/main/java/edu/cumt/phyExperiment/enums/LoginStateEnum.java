@@ -1,5 +1,8 @@
 package edu.cumt.phyExperiment.enums;
 
+/**
+ * 用户登录的数据字典
+ */
 public enum LoginStateEnum {
 
     LOGIN_SUCCESS(0, "登录成功"), SECURITY_CODE_ERROR(-1, "验证码错误"),

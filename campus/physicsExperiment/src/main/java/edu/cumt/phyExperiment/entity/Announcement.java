@@ -15,6 +15,7 @@ public class Announcement {
         this.content = content;
     }
 
+    /*****************Getter和Setter以及toString方法*************************/
     public String getContent() {
         return content;
     }

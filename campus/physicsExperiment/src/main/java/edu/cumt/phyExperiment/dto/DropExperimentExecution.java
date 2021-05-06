@@ -2,6 +2,9 @@ package edu.cumt.phyExperiment.dto;
 
 import edu.cumt.phyExperiment.enums.ExperimentStateEnum;
 
+/**
+ * 用于学生退选实验
+ */
 public class DropExperimentExecution {
     /**
      * 学生退选的实验编号
@@ -22,6 +25,7 @@ public class DropExperimentExecution {
         this.stateInfo = stateEnum.getStateInfo();
     }
 
+    /*********************getter和setter方法***********************************/
     public Long getExperimentId() {
         return experimentId;
     }

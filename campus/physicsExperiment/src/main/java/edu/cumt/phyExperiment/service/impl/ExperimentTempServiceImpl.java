@@ -176,7 +176,7 @@ public class ExperimentTempServiceImpl implements ExperimentTempService {
                 throw new RuntimeException("插入待审核实验失败");
             }
             //添加该实验的许可证明,控制并发性
-            ClickNumberControl.getCountClickNumber().put(experimentDao.queryMaxExperimentId(), new Semaphore((1)));
+            ClickNumberControl.getCountClickNumber().put(experimentDao.queryMaxExperimentId(), new Semaphore(ClickNumberControl.MAX_PERMITS));
             //到这里，都成功
             return result;
         } catch (Exception ex) {

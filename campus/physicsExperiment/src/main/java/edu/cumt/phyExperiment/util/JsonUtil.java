@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Json工具类
+ * Json工具类，将对应对象转为Json对象
  */
 public class JsonUtil {
 
@@ -135,7 +135,7 @@ public class JsonUtil {
                 case '\t': json.append("\\t"); break;
                 case '/': json.append("\\/"); break;
                 default:
-                    if (ch >= '\u0000' && ch <= '\u001F'){
+                    if (ch <= '\u001F'){
                         String ss = Integer.toHexString(ch);
                         json.append("\\u");
                         for (int k = 0; k < 4 - ss.length(); k++) {

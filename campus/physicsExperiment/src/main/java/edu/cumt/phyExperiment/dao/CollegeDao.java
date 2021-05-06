@@ -5,9 +5,12 @@ import edu.cumt.phyExperiment.entity.College;
 
 import java.util.List;
 
+/**
+ * 学院
+ */
 public interface CollegeDao {
     /**
-     * 根据学院代号查询学院名称
+     * 查询学院名称
      * @param collegeId
      * @return
      */

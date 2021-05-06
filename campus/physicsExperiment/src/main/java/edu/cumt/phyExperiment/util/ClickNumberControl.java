@@ -10,6 +10,9 @@ import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Semaphore;
 
+/**
+ * 工具类，设置实验的许可等内容
+ */
 public class ClickNumberControl {
 
     @Autowired
@@ -25,6 +28,7 @@ public class ClickNumberControl {
     //公告内容避免频繁从数据库中获取，启动时这里就给它先读出来，如果修改则一起修改
     private static String announcementContent;
 
+    public static final int MAX_PERMITS = 1;
     //设置每个实验的选课点击人数不能超过如下值
     public static final int MAX_CLICK_NUMBER = 10;
     //保存每个实验选课的点击数，当点击数超过一定次数时拦截
@@ -39,7 +43,7 @@ public class ClickNumberControl {
         for (Experiment e : experimentDao.queryAllowSelectedExperiments()) {
             //赋值完后就可以调用方法
             //这里的Semaphore表示每次最多只能有一个学生选experimentId对应的实验
-            countClickNumber.put(e.getExperimentId(), new Semaphore(1));
+            countClickNumber.put(e.getExperimentId(), new Semaphore(MAX_PERMITS));
         }
         announcementContent = announcementDao.queryAnnouncement();
     }

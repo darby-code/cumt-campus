@@ -1,5 +1,8 @@
 package edu.cumt.phyExperiment.enums;
 
+/**
+ * 用户(学生、老师、管理员)操作相关的数据字典
+ */
 public enum UserOperationStateEnum {
     MODIFY_ANNOUNCEMENT_CONTENT_SUCCESS(8, "修改公告内容成功"),
     RESET_ALL_STUDENT_PASSWORD_SUCCESS(6, "重置该学院所有学生密码成功"), RESET_ALL_TEACHER_PASSWORD_SUCCESS(7, "重置该学院所有老师密码成功"),

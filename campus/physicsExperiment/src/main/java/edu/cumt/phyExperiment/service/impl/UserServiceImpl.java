@@ -29,63 +29,96 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Admin adminLogin(String account, String password) {
-        Admin admin = userDao.queryAdminByAccount(account);
-        if (admin == null) {
+        try {
+            Admin admin = userDao.queryAdminByAccount(account);
+            if (admin == null) {
+                return null;
+            }
+            if (password.equals(admin.getPassword())) {
+                return admin;
+            }
             return null;
+        } catch (Exception ex) {
+            throw new RuntimeException("管理员登录时，系统查询信息出现异常，请尝试重新登录");
         }
-        if (password.equals(admin.getPassword())) {
-            return admin;
-        }
-        return null;
     }
 
     @Override
     public Admin queryAdmin(String account) {
-        return userDao.queryAdminByAccount(account);
+        try {
+            return userDao.queryAdminByAccount(account);
+        } catch (Exception ex) {
+            throw new RuntimeException("根据账号查询管理员信息时出现异常，请重新尝试");
+        }
     }
 
     @Override
     public int studentRegistry(long studentId, String password) {
-        return userDao.updateStudentPassword(studentId, password);
+        try {
+            return userDao.updateStudentPassword(studentId, password);
+        } catch (Exception ex) {
+            throw new RuntimeException("注册时遇到系统内部错误");
+        }
     }
 
     @Override
     public int teacherRegistry(long teacherId, String password) {
-        return userDao.updateTeacherPassword(teacherId, password);
+        try {
+            return userDao.updateTeacherPassword(teacherId, password);
+        } catch (Exception ex) {
+            throw new RuntimeException("注册时遇到系统内部错误");
+        }
     }
 
     @Override
     public Student studentLogin(long studentId, String password) {
-        Student student = userDao.queryStudentById(studentId);
-        if (student == null) {
+        try {
+            Student student = userDao.queryStudentById(studentId);
+            if (student == null) {
+                return null;
+            }
+            if (password.equals(student.getPassword())) {
+                return student;
+            }
             return null;
+        } catch (Exception ex) {
+            throw new RuntimeException("学生登录时，系统查询信息出现异常，请尝试重新登录");
         }
-        if (password.equals(student.getPassword())) {
-            return student;
-        }
-        return null;
+
     }
 
     @Override
     public Teacher teacherLogin(long teacherId, String password) {
-        Teacher teacher = userDao.queryTeacherById(teacherId);
-        if (teacher == null) {
+        try {
+            Teacher teacher = userDao.queryTeacherById(teacherId);
+            if (teacher == null) {
+                return null;
+            }
+            if(password.equals(teacher.getPassword())) {
+                return teacher;
+            }
             return null;
+        } catch (Exception ex) {
+            throw new RuntimeException("教师登录时，系统查询信息出现异常，请尝试重新登录");
         }
-        if(password.equals(teacher.getPassword())) {
-            return teacher;
-        }
-        return null;
     }
 
     @Override
     public Student queryStudent(long studentId) {
-        return userDao.queryStudentById(studentId);
+        try {
+            return userDao.queryStudentById(studentId);
+        } catch (Exception ex) {
+            throw new RuntimeException("根据学号查询学生信息时遇到系统内部错误");
+        }
     }
 
     @Override
     public Teacher queryTeacher(long teacherId) {
-        return userDao.queryTeacherById(teacherId);
+        try {
+            return userDao.queryTeacherById(teacherId);
+        } catch (Exception ex) {
+            throw new RuntimeException("根据工号查询教师信息时遇到系统内部错误");
+        }
     }
 
     @Override

@@ -7,6 +7,9 @@ import org.apache.ibatis.annotations.Param;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * 实验审核
+ */
 public interface ExperimentTempDao {
     /**
      * 根据tempId查询一个审核表中的实验

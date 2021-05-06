@@ -35,7 +35,6 @@ public class ExperimentLimit {
     }
 
     /*****************Getter和Setter以及toString方法*************************/
-
     public Long getExperimentId() {
         return experimentId;
     }

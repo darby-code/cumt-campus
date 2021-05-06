@@ -1,7 +1,7 @@
 package edu.cumt.phyExperiment.dto;
 
 /**
- * 封装实验选课结果的json对象
+ * 封装部分结果并作为json对象返回至前端
  * @param <T>
  */
 public class Result<T> {
@@ -52,6 +52,7 @@ public class Result<T> {
         this.state = state;
     }
 
+    /*********************getter和setter方法***********************************/
     public boolean isSuccess() {
         return success;
     }

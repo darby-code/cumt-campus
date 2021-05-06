@@ -7,6 +7,9 @@ import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
+/**
+ * 实验选课
+ */
 public interface ExperimentSelectedDao {
 
     /**
@@ -16,14 +19,14 @@ public interface ExperimentSelectedDao {
     List<ExperimentSelected> queryAllSelectedExperiments();
 
     /**
-     * 查询一个实验的选课记录
+     * 查询一个实验的所有选课记录
      * @param experimentId
      * @return
      */
     List<ExperimentSelected> queryOneSelectedExperiments(long experimentId);
 
     /**
-     * 查询一条实验选课记录
+     * 查询一条学生实验选课记录
      * @param experimentId
      * @param studentId
      * @return
@@ -45,7 +48,7 @@ public interface ExperimentSelectedDao {
     List<Experiment> queryStudentSelectedExperimentsBy(long studentId);
 
     /**
-     * 学生查询已选实验的成绩，没有结课或没有录入成绩实验的不显示
+     * 学生查询已选实验的成绩，没有结课或没有录入成绩的实验不显示
      * @param studentId
      * @return
      */
@@ -70,14 +73,14 @@ public interface ExperimentSelectedDao {
     int insertExperimentSelected(@Param("experimentId") long experimentId, @Param("studentId") long studentId);
 
     /**
-     * 退选实验编号对应实验已选的全部学生
+     * 退选实验已选的全部学生
      * @param experimentId
      * @return
      */
     int deleteStudentBy(long experimentId);
 
     /**
-     * 删除一个实验选课记录
+     * 删除一条实验选课记录
      * @param experimentId
      * @param studentId
      * @return

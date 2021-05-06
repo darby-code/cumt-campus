@@ -27,7 +27,6 @@ public class ScheduleCheckAllowStateJob {
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     public void work() {
-
         try {
             ExperimentDao experimentDao = ClickNumberControl.getExperimentDao();
             List<Experiment> allowSelectedExperiments = experimentDao.queryAllowSelectedExperiments();
@@ -49,7 +48,5 @@ public class ScheduleCheckAllowStateJob {
             logger.error("实验选课是否结束检查操作遇到异常，异常时间为：" + new Date());
             throw ex;
         }
-
-
     }
 }

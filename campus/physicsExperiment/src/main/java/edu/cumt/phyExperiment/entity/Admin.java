@@ -60,7 +60,6 @@ public class Admin {
     }
 
     /*****************Getter和Setter以及toString方法*************************/
-
     public Long getAdminId() {
         return adminId;
     }

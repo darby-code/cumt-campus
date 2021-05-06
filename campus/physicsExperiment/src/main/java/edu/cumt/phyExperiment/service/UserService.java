@@ -116,12 +116,22 @@ public interface UserService {
      */
     int resetAllTeachersPassword(List<Teacher> teachers);
 
+    /**
+     * 修改学生、老师、管理员信息
+     * @param student
+     * @return
+     */
     int updateStudentInfo(Student student);
 
     int updateTeacherInfo(Teacher teacher);
 
     int updateAdminInfo(Admin admin);
 
+    /**
+     * 查询学生、教师、管理员
+     * 以及一个学院的学生、一个学院的老师
+     * @return
+     */
     List<Student> queryAllStudents();
     List<Teacher> queryAllTeachers();
     List<Admin> queryAllAdmins();

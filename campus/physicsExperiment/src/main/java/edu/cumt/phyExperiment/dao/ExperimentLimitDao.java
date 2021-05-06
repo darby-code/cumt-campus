@@ -5,9 +5,12 @@ import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
+/**
+ * 实验限选
+ */
 public interface ExperimentLimitDao {
     /**
-     *  根据实验编号查询限选实验的学院代号
+     *  查询限选实验的学院代号
      * @param experimentId
      * @return
      */

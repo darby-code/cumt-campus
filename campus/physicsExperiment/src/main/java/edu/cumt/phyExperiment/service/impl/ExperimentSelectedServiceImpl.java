@@ -19,8 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
-import java.util.concurrent.Semaphore;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 @Service("experimentSelectedService")
 public class ExperimentSelectedServiceImpl implements ExperimentSelectedService {
@@ -34,11 +33,23 @@ public class ExperimentSelectedServiceImpl implements ExperimentSelectedService 
     @Autowired
     UserDao userDao;
 
+    //CPU数量
+    public static final int CPU_SIZE = 4;
+    //IO密集型任务
+    public static final int CORE_POOL_SIZE = CPU_SIZE * 2 + 1;
+
+    //经过测试，线程池核心线程数量为50时，效果最优
+    private static ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(50);
+
     public static final int TIME_WAITING_FOR_SELECT_EXPERIMENT = 5;
 
     @Override
     public List<Experiment> querySelectedExperiments(long studentId) {
-        return experimentSelectedDao.queryStudentSelectedExperimentsBy(studentId);
+        try {
+            return experimentSelectedDao.queryStudentSelectedExperimentsBy(studentId);
+        } catch (Exception ex) {
+            throw new RuntimeException("查询学生所选实验课程时遇到错误");
+        }
     }
 
     @Override
@@ -65,89 +76,107 @@ public class ExperimentSelectedServiceImpl implements ExperimentSelectedService 
     }
 
     @Override
-    public SelectedExecution experimentSelectedNumberPlusOne(long experimentId, long studentId) {
+    public SelectedExecution experimentSelectedNumberPlusOne(long experimentId, long studentId) throws ExecutionException, InterruptedException {
+
         Semaphore experimentSelectedPermit = null;
         try {
-            //采用Semaphore控制并发
-            //尝试5s获取许可，如果5s获取不到许可，说明该实验人数过多
-            if ((experimentSelectedPermit = ClickNumberControl.getCountClickNumber().get(experimentId)).tryAcquire(TIME_WAITING_FOR_SELECT_EXPERIMENT, TimeUnit.SECONDS)) {
-                //获取选课许可成功
-                Experiment experiment = experimentDao.queryExperimentById(experimentId);
-                if (experiment == null) {
-                    throw new NotExistsException("所选实验编号：" + experimentId + "对应的实验不存在");
-                }
+            //采用Semaphore控制并发正确性
+            //采用线程池减少创建线程的开销
 
-                List<Experiment> selectedExperiments = experimentSelectedDao.queryStudentSelectedExperimentsBy(studentId);
-                if (selectedExperiments.size() >= 5) {
-                    throw new SelectedLimitException("已达到实验选课数量上限");
-                }
-                //判断是否已选上该实验，如果是，说明出现了重复选
-                for (Experiment e : selectedExperiments) {
-                    if (e.getExperimentId() == experimentId) {
-                        throw new RepeatSelectedException("请勿重复实验选课");
-                    }
-                }
-                if (!experiment.isAllowSelected()) {
-                    throw new NotAllowSelectedException("该实验已关闭选课");
-                }
-                if(experiment.getCapacity().intValue() == experiment.getSelectedNumber().intValue()) {
-                    throw new NoMarginException("实验已选人数达到上限");
-                }
-                List<Long> colleges = experimentLimitDao.queryExperimentLimitCollegeIdById(experimentId);
-                Student student = userDao.queryStudentById(studentId);
-                if (colleges != null) {
-                    for (Long collegeId : colleges) {
-                        if (collegeId == student.getCollege().getCollegeId()) {
-                            throw new CollegeLimitException("实验不对你所在学院开放");
+
+            //尝试获取许可，如果在TIME_WAITING_FOR_SELECT_EXPERIMENT时间内获取不到许可，说明该实验人数过多
+            if (((experimentSelectedPermit = ClickNumberControl.getCountClickNumber().get(experimentId)) != null)
+                    && experimentSelectedPermit.tryAcquire(TIME_WAITING_FOR_SELECT_EXPERIMENT, TimeUnit.SECONDS)) {
+                //获取选课许可成功
+                //获取线程池线程执行选课
+                Semaphore finalExperimentSelectedPermit = experimentSelectedPermit;
+                Future<SelectedExecution> result = executor.submit(new Callable<SelectedExecution>() {
+
+                    private Semaphore selfSelectedPeriment = finalExperimentSelectedPermit;
+
+                    @Override
+                    public SelectedExecution call() {
+                        Experiment experiment = experimentDao.queryExperimentById(experimentId);
+                        if (experiment == null) {
+                            throw new NotExistsException("所选实验编号：" + experimentId + "对应的实验不存在");
                         }
+
+                        List<Experiment> selectedExperiments = experimentSelectedDao.queryStudentSelectedExperimentsBy(studentId);
+                        if (selectedExperiments.size() >= 5) {
+                            throw new SelectedLimitException("已达到实验选课数量上限");
+                        }
+                        //判断是否已选上该实验，如果是，说明出现了重复选
+                        for (Experiment e : selectedExperiments) {
+                            if (e.getExperimentId() == experimentId) {
+                                throw new RepeatSelectedException("请勿重复实验选课");
+                            }
+                        }
+                        if (!experiment.isAllowSelected()) {
+                            throw new NotAllowSelectedException("该实验已关闭选课");
+                        }
+                        if(experiment.getCapacity().intValue() == experiment.getSelectedNumber().intValue()) {
+                            throw new NoMarginException("实验已选人数达到上限");
+                        }
+                        List<Long> colleges = experimentLimitDao.queryExperimentLimitCollegeIdById(experimentId);
+                        Student student = userDao.queryStudentById(studentId);
+                        if (colleges != null) {
+                            for (long collegeId : colleges) {
+                                if (collegeId == (student.getCollege().getCollegeId())) {
+                                    throw new CollegeLimitException("实验不对你所在学院开放");
+                                }
+                            }
+                        }
+                        //判断实验时间是否冲突
+                        String dateStr = experiment.getExperimentTime().toString();
+                        for (Experiment e : selectedExperiments) {
+                            if (dateStr.equals(e.getExperimentTime().toString())) {
+                                //出现了实验时间冲突
+                                throw new ConflictException("实验时间冲突");
+                            }
+                        }
+                        //到这里说明是可以该学生是可以选该实验的
+                        int result = selectedExperiment(experimentId, studentId);
+                        if (result != 1) {
+                            throw new SelectedException("服务器内部出现错误，该选课操作无法进行");
+                        }
+                        ExperimentSelected selected = experimentSelectedDao.queryOneSelectedExperiment(experimentId, studentId);
+                        //实验选课成功,释放选课许可
+                        selfSelectedPeriment.release();
+                        return new SelectedExecution(experimentId, ExperimentStateEnum.SUCCESS
+                                , selected);
                     }
-                }
-                //判断实验时间是否冲突
-                String dateStr = experiment.getExperimentTime().toString();
-                for (Experiment e : selectedExperiments) {
-                    if (dateStr.equals(e.getExperimentTime().toString())) {
-                        //出现了实验时间冲突
-                        throw new ConflictException("实验时间冲突");
-                    }
-                }
-                //到这里说明是可以该学生是可以选该实验的
-                int result = selectedExperiment(experimentId, studentId);
-                if (result == 0) {
-                    throw new SelectedException("服务器内部出现错误，该选课操作无法进行");
-                }
-                ExperimentSelected selected = experimentSelectedDao.queryOneSelectedExperiment(experimentId, studentId);
-                //实验选课成功,释放选课许可
-                experimentSelectedPermit.release();
-                return new SelectedExecution(experimentId, ExperimentStateEnum.SUCCESS
-                        , selected);
+                });
+                return result.get();
             }
         } catch (NotExistsException | SelectedLimitException | RepeatSelectedException
                 | NotAllowSelectedException | NoMarginException | ConflictException
                 | SelectedException | CollegeLimitException e1) {
             //选实验失败，也必须释放选课许可
-            experimentSelectedPermit.release();
+            if (experimentSelectedPermit != null) {
+                experimentSelectedPermit.release();
+            }
+            e1.printStackTrace();
             throw e1;
         } catch (Exception e8) {
             //选实验失败，也必须释放选课许可
-            experimentSelectedPermit.release();
-            throw new RuntimeException("选课时出现了一个未知的错误");
+            if (experimentSelectedPermit != null) {
+                experimentSelectedPermit.release();
+            }
+            e8.printStackTrace();
+            throw new RuntimeException();
         }
         //到这里，说明该学生没有获取到选课许可，返回一个TOO_MANY_HITS
         return new SelectedExecution(experimentId, ExperimentStateEnum.TOO_MANY_HITS);
+
     }
 
     @Transactional
     //加事务管理，失败回滚
     //这里不存在竞态，所以不用加锁
     public int selectedExperiment(long experimentId, long studentId) {
-        int plusOne = experimentDao.experimentSelectedNumberPlusOne(experimentId);
-        int addOne = experimentSelectedDao.insertExperimentSelected(experimentId, studentId);
-        //必须为plusOne = 1   addOne = 1
-        if (plusOne != 1 || addOne != 1) {
-            //实验选课失败
-            return 0;
-        }
-        //实验选课成功
+        experimentDao.experimentSelectedNumberPlusOne(experimentId);
+        experimentSelectedDao.insertExperimentSelected(experimentId, studentId);
+        //选课成功
         return 1;
     }
 
@@ -171,7 +200,11 @@ public class ExperimentSelectedServiceImpl implements ExperimentSelectedService 
 
     @Override
     public List<Student> queryExperimentStudents(long experimentId) {
-        return experimentSelectedDao.queryExperimentSelectedStudentBy(experimentId);
+        try {
+            return experimentSelectedDao.queryExperimentSelectedStudentBy(experimentId);
+        } catch (Exception ex) {
+            throw new RuntimeException("查询一个实验的选课学生时遇到错误");
+        }
     }
 
     @Override

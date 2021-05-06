@@ -19,12 +19,21 @@ public class RoleTransfer {
      */
     private RoleStateEnum roleStateEnum;
 
+    /**
+     * 登录的用户为学生或老师
+     */
     private Long studentOrTeacherId;
 
+    /**
+     * 登录的用户为管理员
+     */
     private String adminAccount;
 
     public RoleTransfer() {}
 
+    /**
+     * 登录的用户为学生或老师的构造器
+     */
     public RoleTransfer(long studentOrTeacherId, String name, String password, RoleStateEnum roleStateEnum) {
         this.studentOrTeacherId = studentOrTeacherId;
         this.name = name;
@@ -32,6 +41,9 @@ public class RoleTransfer {
         this.roleStateEnum = roleStateEnum;
     }
 
+    /**
+     * 登录的用户为管理员的构造器
+     */
     public RoleTransfer(String adminAccount, String name, String password, RoleStateEnum roleStateEnum) {
         this.adminAccount = adminAccount;
         this.name = name;
@@ -39,6 +51,7 @@ public class RoleTransfer {
         this.roleStateEnum = roleStateEnum;
     }
 
+    /*********************getter和setter方法***********************************/
     public String getName() {
         return name;
     }

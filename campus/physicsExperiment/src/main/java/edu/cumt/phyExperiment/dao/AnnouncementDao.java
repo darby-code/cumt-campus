@@ -1,5 +1,8 @@
 package edu.cumt.phyExperiment.dao;
 
+/**
+ *  公告
+ */
 public interface AnnouncementDao {
 
     /**

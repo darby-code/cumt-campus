@@ -2,6 +2,9 @@ package edu.cumt.phyExperiment.dto;
 
 import edu.cumt.phyExperiment.enums.LoginStateEnum;
 
+/**
+ * 登录的结果封装成JSON对象返回
+ */
 public class LoginResult {
 
     private boolean success;
@@ -80,7 +83,7 @@ public class LoginResult {
         this.stateInfo = stateEnum.getStateInfo();
     }
 
-
+    /*********************getter和setter方法***********************************/
     public boolean isSuccess() {
         return success;
     }

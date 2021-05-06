@@ -83,7 +83,7 @@
         es.allowModified
         FROM experiment_selected es INNER JOIN ((experiment e INNER JOIN teacher t ON e.teacher_id = t.teacher_id)
         INNER JOIN (student s INNER JOIN college c ON s.college_id = c.college_id)) ON (es.experiment_id = e.experiment_id AND es.student_id = s.student_id)
-        WHERE es.experiment_id = #{experimentId} AND es.student_id = #{studentId}
+        WHERE es.experiment_id = #{experimentId} AND es.student_id = #{studentId} LIMIT 1
     </select>
     <select id="queryExperimentSelectedStudentBy" resultType="edu.cumt.phyExperiment.entity.Student">
         SELECT 

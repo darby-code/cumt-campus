@@ -7,6 +7,7 @@ import edu.cumt.phyExperiment.entity.ExperimentSelected;
 import edu.cumt.phyExperiment.entity.Student;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 /**
  * ExperimentSelectedService功能：
@@ -48,7 +49,7 @@ public interface ExperimentSelectedService {
      * @param studentId
      * @return
      */
-    SelectedExecution experimentSelectedNumberPlusOne(long experimentId, long studentId);
+    SelectedExecution experimentSelectedNumberPlusOne(long experimentId, long studentId) throws ExecutionException, InterruptedException;
 
     /**
      * 学生实验退课

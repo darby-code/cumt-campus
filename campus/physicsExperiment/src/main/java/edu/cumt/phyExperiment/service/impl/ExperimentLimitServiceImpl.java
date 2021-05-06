@@ -17,27 +17,44 @@ public class ExperimentLimitServiceImpl implements ExperimentLimitService {
 
     @Override
     public List<Long> queryExperimentAllowSelectedColleges(long experimentId) {
-        return experimentLimitDao.queryExperimentLimitCollegeIdById(experimentId);
+        try {
+            return experimentLimitDao.queryExperimentLimitCollegeIdById(experimentId);
+        } catch (Exception ex) {
+            throw new RuntimeException("查询实验可选学院代号信息时遇到错误");
+        }
+
     }
 
     @Override
     public int addConditionAtExperiment(long experimentId, List<Long> collegeConditions) {
-        int result = 0;
-        for (Long collegeId : collegeConditions) {
-            if (collegeId != null) {
-                result += experimentLimitDao.insertCollegeLimit(experimentId, collegeId);
+        try {
+            int result = 0;
+            for (Long collegeId : collegeConditions) {
+                if (collegeId != null) {
+                    result += experimentLimitDao.insertCollegeLimit(experimentId, collegeId);
+                }
             }
+            return result;
+        } catch (Exception ex) {
+            throw new RuntimeException("为实验增加限选学院条件时遇到错误");
         }
-        return result;
     }
 
     @Override
     public int moveConditionAtExperiment(long experimentId, long collegeId) {
-        return experimentLimitDao.deleteCollegeLimit(experimentId, collegeId);
+        try {
+            return experimentLimitDao.deleteCollegeLimit(experimentId, collegeId);
+        } catch (Exception ex) {
+            throw new RuntimeException("删除限选学院条件时遇到错误");
+        }
     }
 
     @Override
     public int moveAllConditionsAtExperiment(long experimentId) {
-        return experimentLimitDao.deleteExperimentLimitById(experimentId);
+        try {
+            return experimentLimitDao.deleteExperimentLimitById(experimentId);
+        } catch (Exception ex) {
+            throw new RuntimeException("删除一个实验所有限选学院条件时遇到错误");
+        }
     }
 }
