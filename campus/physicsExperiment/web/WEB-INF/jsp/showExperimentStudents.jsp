@@ -35,7 +35,7 @@
                                     <tr>
                                         <th scope="row">${student.studentId}</th>
                                         <td>${student.studentName}</td>
-                                        <td>${student.sex}</td>
+                                        <td>${student.sex == false ? "男" : "女"}</td>
                                         <td>${student.college.collegeName}</td>
                                         <td>${student.classInfo}</td>
                                         <td>${student.phoneNumber}</td>

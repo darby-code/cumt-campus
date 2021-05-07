@@ -37,15 +37,16 @@ public class ExperimentController {
     @Autowired
     CollegeService collegeService;
 
-    private static final int AUDIT_PASS = 2;
-    private static final int AUDIT_NOT_PASS = 1;
+    private static final int AUDIT_PASS = 2;  //实验审核通过标识符
+    private static final int AUDIT_NOT_PASS = 1;  //实验审核不通过标识符
     private static final long EXPERIMENT_DEADLINE = 1000 * 60 * 60 * 24;  //选课截止时间为提前一天
-
+    private static final int DEFAULT_PAGE_SIZE = 5;  //默认页数据量大小
+//查询所有实验
     @RequestMapping("/allExperiments.do")
     public String allExperiments(@RequestParam(required = true, defaultValue = "1") Integer pageNum
             , @RequestParam(required = false) Integer pageSize, Model model) {
         int currentPageNum = pageNum;
-        int currentPageSize = pageSize == null ? 5 : pageSize;
+        int currentPageSize = pageSize == null ? DEFAULT_PAGE_SIZE : pageSize;
         try {
             //开始分页
             PageHelper.startPage(currentPageNum, currentPageSize, true);
@@ -59,7 +60,7 @@ public class ExperimentController {
             return "mistake";
         }
     }
-
+//查询实验详细信息
     @RequestMapping("/experimentDetails.do")
     public String experimentDetails(long experimentId, Model model) {
         try {
@@ -71,12 +72,12 @@ public class ExperimentController {
             return "mistake";
         }
     }
-
+//显示搜索界面
     @RequestMapping("/showSearchBox.do")
     public String showSearchBox() {
         return "searchExperiment";
     }
-
+//关键词查找实验
     @RequestMapping("/searchExperiment.do")
     public String searchExperiment(String words, @RequestParam(required = true, defaultValue = "1") Integer pageNum
             , @RequestParam(required = false) Integer pageSize, Model model) {
@@ -99,7 +100,7 @@ public class ExperimentController {
             return "mistake";
         }
     }
-
+//学生已选实验
     @RequestMapping("/selectedList.do")
     public String studentSelectedList(@RequestParam("studentId") long studentId, Model model) {
         try {
@@ -112,7 +113,7 @@ public class ExperimentController {
             return "mistake";
         }
     }
-
+//退选实验
     @ResponseBody
     @RequestMapping(value = "/dropExperiment.do", produces = "application/json;charset=UTF-8")
     public Object dropExperiment(@RequestParam(value = "studentId") long studentId
@@ -131,7 +132,7 @@ public class ExperimentController {
         }
         return result;
     }
-
+//显示可选实验界面
     @RequestMapping("/showSelectExperiment.do")
     public String selectExperimentBox(long studentId, @RequestParam(required = true, defaultValue = "1") Integer pageNum
             , @RequestParam(required = false) Integer pageSize, Model model) {
@@ -165,7 +166,7 @@ public class ExperimentController {
             return "mistake";
         }
     }
-
+//学生选实验
     @ResponseBody
     @RequestMapping(value = "/selectExperiment.do", produces = "application/json;charset=UTF-8")
     public Object selectExperiment(long studentId, long experimentId) {
@@ -200,7 +201,7 @@ public class ExperimentController {
         }
         return result;
     }
-
+//学生查询实验成绩
     @RequestMapping("/studentScore.do")
     public String queryStudentExperimentScore(long studentId, Model model) {
         List<ExperimentSelected> studentSelectedExperiment = null;
@@ -214,7 +215,7 @@ public class ExperimentController {
         model.addAttribute("scoreList", studentSelectedExperiment);
         return "studentScore";
     }
-
+//教师发布新实验界面
     @RequestMapping("/showNewExperimentBox.do")
     public String showNewExperimentBox(Model model) {
         List<College> colleges = null;
@@ -236,7 +237,7 @@ public class ExperimentController {
         model.addAttribute("experimentPlaces", experimentPlaces);
         return "newExperiment";
     }
-
+//教师提交新实验表单
     @ResponseBody
     @RequestMapping(value = "/submitNewExperiment.do", produces = "application/json;charset=UTF-8")
     public Object submitNewExperiment(long submitTeacherId, String experimentTime, String experimentPlace,
@@ -262,7 +263,7 @@ public class ExperimentController {
         }
         return result;
     }
-
+//教师查看自己发布的实验
     @RequestMapping("/showSubmitExperiments.do")
     public String showSubmitExperiments(long submitTeacherId, Model model) {
         List<ExperimentTemp> tempList = null;
@@ -283,7 +284,7 @@ public class ExperimentController {
         model.addAttribute("submitExperiments", tempList);
         return "submitExperiments";
     }
-
+//显示教师实验课程
     @RequestMapping("/showTeacherExperiments.do")
     public String showSelfExperiments(long teacherId, Model model) {
         List<Experiment> teacherExperiments = null;
@@ -296,7 +297,7 @@ public class ExperimentController {
         model.addAttribute("teacherExperiments", teacherExperiments);
         return "showTeacherExperiments";
     }
-
+//显示教师实验课程的学生
     @RequestMapping("/showExperimentStudents.do")
     public String showExperimentStudents(long teacherId, Model model) {
         List<Experiment> teacherExperiments = null;
@@ -315,7 +316,7 @@ public class ExperimentController {
         model.addAttribute("experimentStudentMap", experimentStudentMap);
         return "showExperimentStudents";
     }
-
+//显示实验学生的成绩
     @RequestMapping("showStudentScore.do")
     public String showStudentScore(long teacherId, Model model) {
         List<Experiment> teacherExperiments = null;
@@ -335,7 +336,7 @@ public class ExperimentController {
         model.addAttribute("teacherExperiments", teacherExperiments);
         return "scoreRegistration";
     }
-
+//教师录入实验学生成绩
     @ResponseBody
     @RequestMapping(value = "/submitStudentScore.do", produces = "application/json;charset=UTF-8")
     public Object submitStudentScore(long experimentId, long studentId, int score) {
@@ -353,7 +354,7 @@ public class ExperimentController {
         }
         return result;
     }
-
+//显示待审核实验界面
     @RequestMapping("/showAuditExperiments.do")
     public String showAuditExperiments(@RequestParam(required = true, defaultValue = "1") Integer pageNum
             , @RequestParam(required = false) Integer pageSize, Model model) {
@@ -379,7 +380,7 @@ public class ExperimentController {
             return "mistake";
         }
     }
-
+//显示实验审核历史
     @RequestMapping("/showAuditHistory.do")
     public String showAuditHistory(@RequestParam(required = true, defaultValue = "1") Integer pageNum
             , @RequestParam(required = false) Integer pageSize, Model model) {
@@ -412,7 +413,7 @@ public class ExperimentController {
             return "mistake";
         }
     }
-
+//实验审核通过
     @ResponseBody
     @RequestMapping(value = "/auditPass.do", produces = "application/json;charset=UTF-8")
     public Object auditExperimentPass(long tempId, String auditAdminAccount) {
@@ -427,7 +428,7 @@ public class ExperimentController {
         }
         return result;
     }
-
+//实验审核不通过
     @ResponseBody
     @RequestMapping(value = "/auditNotPass.do", produces = "application/json;charset=UTF-8")
     public Object auditExperimentNotPass(long tempId, String auditAdminAccount) {
@@ -440,7 +441,7 @@ public class ExperimentController {
         }
         return result;
     }
-
+//管理员界面显示所有可选实验，可手动提前关闭实验选课
     @RequestMapping("/showAllowSelectedExperiments.do")
     public String showAllowSelectedExperiments(@RequestParam(required = true, defaultValue = "1") Integer pageNum
             , @RequestParam(required = false) Integer pageSize, Model model) {
@@ -465,7 +466,7 @@ public class ExperimentController {
             return "mistake";
         }
     }
-
+//手动关闭实验选课
     @ResponseBody
     @RequestMapping(value = "/setExperimentNotAllowSelected.do", produces = "application/json;charset=UTF-8")
     public Object setExperimentNotAllowSelected(long experimentId) {

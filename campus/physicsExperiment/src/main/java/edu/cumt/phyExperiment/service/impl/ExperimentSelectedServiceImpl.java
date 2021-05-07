@@ -95,10 +95,10 @@ public class ExperimentSelectedServiceImpl implements ExperimentSelectedService 
                     private Semaphore selfSelectedPeriment = finalExperimentSelectedPermit;
 
                     @Override
-                    public SelectedExecution call() {
+                    public SelectedExecution call() throws RuntimeException {
                         Experiment experiment = experimentDao.queryExperimentById(experimentId);
                         if (experiment == null) {
-                            throw new NotExistsException("所选实验编号：" + experimentId + "对应的实验不存在");
+                            throw new NotExistsException("所选实验不存在");
                         }
 
                         List<Experiment> selectedExperiments = experimentSelectedDao.queryStudentSelectedExperimentsBy(studentId);
@@ -151,6 +151,8 @@ public class ExperimentSelectedServiceImpl implements ExperimentSelectedService 
         } catch (NotExistsException | SelectedLimitException | RepeatSelectedException
                 | NotAllowSelectedException | NoMarginException | ConflictException
                 | SelectedException | CollegeLimitException e1) {
+            //这里无法捕获到call方法的异常
+            //只能在Exception中进行处理自定义异常
             //选实验失败，也必须释放选课许可
             if (experimentSelectedPermit != null) {
                 experimentSelectedPermit.release();
@@ -163,7 +165,27 @@ public class ExperimentSelectedServiceImpl implements ExperimentSelectedService 
                 experimentSelectedPermit.release();
             }
             e8.printStackTrace();
-            throw new RuntimeException();
+            //call方法中的异常只会在Exception中被捕获
+            //因此，对于自定义异常，需要进行下面的判断，目前的知识水平没有更好的解决办法
+            if ("edu.cumt.phyExperiment.exception.SelectedLimitException: 已达到实验选课数量上限".equals(e8.getMessage())) {
+                throw new SelectedLimitException("已达到实验选课数量上限");
+            } else if ("edu.cumt.phyExperiment.exception.NotExistsException: 所选实验不存在".equals(e8.getMessage())) {
+                throw new NotExistsException("所选实验不存在");
+            } else if ("edu.cumt.phyExperiment.exception.RepeatSelectedException: 请勿重复实验选课".equals(e8.getMessage())) {
+                throw new RepeatSelectedException("请勿重复实验选课");
+            } else if ("edu.cumt.phyExperiment.exception.NotAllowSelectedException: 该实验已关闭选课".equals(e8.getMessage())) {
+                throw new NotAllowSelectedException("该实验已关闭选课");
+            } else if ("edu.cumt.phyExperiment.exception.NoMarginException: 实验已选人数达到上限".equals(e8.getMessage())) {
+                throw new NoMarginException("实验已选人数达到上限");
+            } else if ("edu.cumt.phyExperiment.exception.CollegeLimitException: 实验不对你所在学院开放".equals(e8.getMessage())) {
+                throw new CollegeLimitException("实验不对你所在学院开放");
+            } else if ("edu.cumt.phyExperiment.exception.ConflictException: 实验时间冲突".equals(e8.getMessage())) {
+                throw new ConflictException("实验时间冲突");
+            } else if ("edu.cumt.phyExperiment.exception.SelectedException: 服务器内部出现错误，该选课操作无法进行".equals(e8.getMessage())) {
+                throw new SelectedException("服务器内部出现错误，该选课操作无法进行");
+            } else {
+                throw new RuntimeException("服务器内部出现错误");
+            }
         }
         //到这里，说明该学生没有获取到选课许可，返回一个TOO_MANY_HITS
         return new SelectedExecution(experimentId, ExperimentStateEnum.TOO_MANY_HITS);

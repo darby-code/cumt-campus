@@ -28,7 +28,7 @@ public class UserController {
     UserService userService;
     @Autowired
     CollegeService collegeService;
-
+//学生个人信息界面
     @RequestMapping(value = "/studentInfo.do", produces = "text/html;charset=UTF-8")
     public String queryStudentInfo(long studentId, Model model) {
         Student student = null;
@@ -46,7 +46,7 @@ public class UserController {
         model.addAttribute("information", student);
         return "infoPage";
     }
-
+//学生修改个人信息
     @ResponseBody
     @RequestMapping(value = "/updateStudentInfo.do", produces = "application/json;charset=UTF-8")
     public Object updateStudentInfo(long studentId, @RequestParam(value = "phoneNumber", required = false) String phoneNumber
@@ -69,7 +69,7 @@ public class UserController {
         }
         return result;
     }
-
+//显示修改密码界面
     @RequestMapping("/showUpdatePasswordBox.do")
     public String showUpdateBox(String role, String roleInfo, Model model) {
         if ("student".equals(role)) {
@@ -88,7 +88,7 @@ public class UserController {
         model.addAttribute("role", role);
         return "updatePassword";
     }
-
+//修改密码
     @ResponseBody
     @RequestMapping(value = "/updatePassword.do", produces = "application/json;charset=UTF-8")
     public Object updateStudentPassword(String role, String roleInfo, String oldPassword, String newPassword) {
@@ -117,7 +117,7 @@ public class UserController {
         }
         return result;
     }
-
+//显示教师个人信息界面
     @RequestMapping("/teacherInfo.do")
     public String queryTeacherInfo(long teacherId, Model model) {
         Teacher teacher = null;
@@ -135,7 +135,7 @@ public class UserController {
         model.addAttribute("information", teacher);
         return "infoPage";
     }
-
+//教师修改个人信息
     @ResponseBody
     @RequestMapping(value = "/updateTeacherInfo.do", produces = "application/json;charset=UTF-8")
     public Object updateTeacherInfo(long teacherId, @RequestParam(value = "phoneNumber", required = false) String phoneNumber
@@ -158,7 +158,7 @@ public class UserController {
         }
         return result;
     }
-
+//显示管理员个人信息界面
     @RequestMapping("/adminInfo.do")
     public String queryAdminInfo(String account, Model model) {
         Admin admin = null;
@@ -176,7 +176,7 @@ public class UserController {
         model.addAttribute("information", admin);
         return "infoPage";
     }
-
+//管理员修改个人信息
     @ResponseBody
     @RequestMapping(value = "/updateAdminInfo.do", produces = "application/json;charset=UTF-8")
     public Object updateAdminInfo(String account, @RequestParam(value = "phoneNumber", required = false) String phoneNumber
@@ -199,7 +199,7 @@ public class UserController {
         }
         return result;
     }
-
+//显示所有学生信息
     @RequestMapping("showStudentInfo.do")
     public String showStudentInfo(@RequestParam(required = true, defaultValue = "1") Integer pageNum
             , @RequestParam(required = false) Integer pageSize, Model model) {
@@ -217,7 +217,7 @@ public class UserController {
             return "mistake";
         }
     }
-
+//显示所有教师信息
     @RequestMapping("showTeacherInfo.do")
     public String showTeacherInfo(@RequestParam(required = true, defaultValue = "1") Integer pageNum
             , @RequestParam(required = false) Integer pageSize, Model model) {
@@ -235,7 +235,7 @@ public class UserController {
             return "mistake";
         }
     }
-
+//显示重置学生密码界面
     @RequestMapping("/showResetStudentPasswordBox.do")
     public String showResetStudentPasswordBox(@RequestParam(required = true, defaultValue = "1") Integer pageNum
             , @RequestParam(required = false) Integer pageSize, Model model) {
@@ -261,7 +261,7 @@ public class UserController {
             return "mistake";
         }
     }
-
+//学生密码界面子内容
     @RequestMapping("/studentResetTable.do")
     public String studentResetTable(long collegeId, @RequestParam(required = true, defaultValue = "1") Integer pageNum
             , @RequestParam(required = false) Integer pageSize, Model model) {
@@ -281,7 +281,7 @@ public class UserController {
             return "mistake";
         }
     }
-
+//显示重置教师密码界面
     @RequestMapping("/showResetTeacherPasswordBox.do")
     public String showResetTeacherPasswordBox(@RequestParam(required = true, defaultValue = "1") Integer pageNum
             , @RequestParam(required = false) Integer pageSize, Model model) {
@@ -307,7 +307,7 @@ public class UserController {
             return "mistake";
         }
     }
-
+//教师密码界面子内容
     @RequestMapping("/teacherResetTable.do")
     public String teacherResetTable(long collegeId, @RequestParam(required = true, defaultValue = "1") Integer pageNum
             , @RequestParam(required = false) Integer pageSize, Model model) {
@@ -327,7 +327,7 @@ public class UserController {
             return "mistake";
         }
     }
-
+//重置学生密码
     @ResponseBody
     @RequestMapping(value = "/resetStudentPassword.do", produces = "application/json;charset=UTF-8")
     public Object resetStudentPassword(long studentId) {
@@ -340,7 +340,7 @@ public class UserController {
         }
         return result;
     }
-
+//重置教师密码
     @ResponseBody
     @RequestMapping(value = "/resetTeacherPassword.do", produces = "application/json;charset=UTF-8")
     public Object resetTeacherPassword(long teacherId) {
@@ -353,7 +353,7 @@ public class UserController {
         }
         return result;
     }
-
+//一键重置学生密码
     @ResponseBody
     @RequestMapping(value = "/resetAllStudentPassword.do", produces = "application/json;charset=UTF-8")
     public Object resetAllStudentPassword(long collegeId) {
@@ -367,7 +367,7 @@ public class UserController {
         }
         return result;
     }
-
+//一键重置教师密码
     @ResponseBody
     @RequestMapping(value = "/resetAllTeacherPassword.do", produces = "application/json;charset=UTF-8")
     public Object resetAllTeacherPassword(long collegeId) {
@@ -381,13 +381,13 @@ public class UserController {
         }
         return result;
     }
-
+//获取公告内容
     @RequestMapping("showAnnouncementContent.do")
     public String showAnnouncementContent(Model model) {
         model.addAttribute("announcementContent", ClickNumberControl.getAnnouncementContent());
         return "showAnnouncementContent";
     }
-
+//修改公告内
     @ResponseBody
     @RequestMapping(value = "modifyContent.do", produces = "application/json;charset=UTF-8")
     public Object modifyAnnouncementContent(String newContent) {

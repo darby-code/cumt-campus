@@ -43,14 +43,14 @@ public class LoginController {
     public void setKaptchaProducer(Producer kaptchaProducer) {
         this.kaptchaProducer = kaptchaProducer;
     }
-
+//登录页面
     @RequestMapping("/index.do")
     public String loginEntrance(Model model) {
         //从初始化内容中获取公告，防止频繁读取数据库
        model.addAttribute("announcementContent", ClickNumberControl.getAnnouncementContent());
         return "login";
     }
-
+//登录检查，检查通过则自动登录，否则返回提示信息
     @ResponseBody
     @RequestMapping(value = "/loginCheck.do", produces = "application/json;charset=UTF-8")
     public Object loginCheck(HttpServletRequest request) {
@@ -136,7 +136,7 @@ public class LoginController {
             return new LoginResult(false, role, LoginStateEnum.ROLE_NOT_EXISTS);
         }
     }
-
+//登录检查通过，登陆到各自主界面
     @RequestMapping("/login.do")
     public String login(HttpServletRequest request, Model model) {
         //提交到这的，已经经过loginCheck验证
@@ -193,7 +193,7 @@ public class LoginController {
             return "login";
         }
     }
-
+//验证码
     @RequestMapping("/getVerifyCode.do")
     public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) {
         response.setDateHeader("Expires", 0);
